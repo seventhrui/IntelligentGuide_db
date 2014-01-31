@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <!-- wsc strat -->
+    <color name="red">#FF0000 </color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="blue">#073888</color>
+    <color name="yellow">#FFFF00</color>
+    <color name="gray">#808080</color>
+    <color name="purple">#800080</color>
+    <color name="green">#008000</color>
+    <color name="dimgray">#696969</color>
+    <color name="deepblue">#214263</color>
+    <!-- wsc end -->
+    
+    <!-- lhb strat-->
+    <color name="lightgray">#5B5B5B</color>
+    <!-- lhb end  -->
+</resources>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">智能语音导游</string>
+    
+    <string name="place">地区</string>
+    <string name="scenic_zone">景区列表</string>
+    <string name="filename">音频文件</string>
+    <string name="playbutton">播放</string>
+    <string name="pausebutton">暂停</string>
+    <string name="continues">继续</string>
+    <string name="lastbutton">上一个</string>
+    <string name="nextbutton">下一个</string>
+    <string name="filenoexist">景点信息有误</string>
+    <string name="waiting">正在加载信息......</string>
+    <string name="layout2_point">请输入景点对应数字,按确定收听</string>
+    <string name="list">景点列表</string>
+    <string name="find">查找</string>
+    <string name="map">地图</string>
+    <string name="speak">语音识别</string>
+    <string name="speakagain">识别失败，请重试</string>
+    <string name="gps">自动模式</string>
+    <string name="remind">该版本暂不支持该功能</string>
+    <string name="returnexit">再按一次退出程序</string>
+    <string name="exit">退出</string>
+    <string name="login">登陆</string>
+    <string name="recommend">推荐</string>
+    <string name="advice">意见</string>
+    <string name="update">更新</string>
+    <string name="updated">当前已经为最新</string>
+    <string name="about">关于</string>
+    <string name="aboutstring">该软件由第柒蔀落完成\n软件版本：1.0\nQQ:422708630</string>
+    <string name="keykey">走你</string>
+</resources>
