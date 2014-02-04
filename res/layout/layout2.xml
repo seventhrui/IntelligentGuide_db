@@ -18,9 +18,11 @@
             android:background="@drawable/shape_keypad_all_corner"
             android:enabled="false"
             android:maxLength="16"
-            android:text="@string/layout2_point"
+            android:hint="@string/layout2_point"
+            
             android:textColor="@color/white"
             android:textSize="20sp" />
+       <!-- android:text="@string/layout2_point" -->
 
     </LinearLayout>
     
