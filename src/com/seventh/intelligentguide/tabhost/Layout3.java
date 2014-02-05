@@ -1,13 +1,13 @@
-package com.seventh.tabhost;
+package com.seventh.intelligentguide.tabhost;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-import com.seventh.R;
-import com.seventh.util.Player;
-import com.seventh.vo.Meohe;
+import com.seventh.intelligentguide.R;
+import com.seventh.intelligentguide.util.Player;
+import com.seventh.intelligentguide.vo.ScenicSpot;
 
 import android.app.Activity;
 import android.content.Context;
@@ -37,7 +37,7 @@ public class Layout3 extends Activity implements OnTouchListener {
 	ImageView imgView;
 	Bitmap map;
 	
-	ArrayList<Meohe> plist;//景点信息列表
+	ArrayList<ScenicSpot> plist;//景点信息列表
 
 	float minScaleR;// 最小缩放比例
 	float wmin, hmin;
@@ -154,7 +154,7 @@ public class Layout3 extends Activity implements OnTouchListener {
 				this.imgView.getScrollY());
 		matrix2.mapPoints(coords);
 
-		for (Meohe m : plist) {
+		for (ScenicSpot m : plist) {
 			if (m.getX() + SPACE >= coords[0] && m.getX() - SPACE <= coords[0]
 					&& m.getY() + SPACE >= coords[1] && m.getY() - SPACE <= coords[1]) {
 				Toast.makeText(getApplicationContext(), R.string.waiting, 1)
@@ -265,9 +265,9 @@ public class Layout3 extends Activity implements OnTouchListener {
 		point.set(x / 2, y / 2);
 	}
 	//读取景点信息列表
-	private ArrayList<Meohe> list() {
+	private ArrayList<ScenicSpot> list() {
 		String s = "";
-		ArrayList<Meohe> aList = new ArrayList<Meohe>();// 景点信息列表
+		ArrayList<ScenicSpot> aList = new ArrayList<ScenicSpot>();// 景点信息列表
 		String[] temp = new String[5];
 		InputStream in=null;
 		try {
@@ -282,7 +282,7 @@ public class Layout3 extends Activity implements OnTouchListener {
 			while ((s = bfr.readLine()) != null) {
 				//Log.v(null, s);
 				temp = s.split(",");
-				aList.add(new Meohe(temp[0], temp[1], temp[2],temp[3], temp[4]));
+				aList.add(new ScenicSpot(temp[0], temp[1], temp[2],temp[3], temp[4]));
 			}
 			bfr.close();
 			in.close();

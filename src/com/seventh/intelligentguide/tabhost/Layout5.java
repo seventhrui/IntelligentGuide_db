@@ -1,4 +1,4 @@
-package com.seventh.tabhost;
+package com.seventh.intelligentguide.tabhost;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.seventh.R;
-import com.seventh.main.Index;
-import com.seventh.vo.Meohe;
+import com.seventh.intelligentguide.R;
+import com.seventh.intelligentguide.Index;
+import com.seventh.intelligentguide.vo.ScenicSpot;
 
 import android.app.Activity;
 import android.content.Context;
@@ -45,7 +45,7 @@ public class Layout5 extends Activity {
     private LocationManager lm;
     private static final String TAG="GpsActivity";
 
-	List<Meohe> list=new ArrayList<Meohe>();
+	List<ScenicSpot> list=new ArrayList<ScenicSpot>();
 	
 	@Override
 	protected void onDestroy() {
@@ -111,9 +111,9 @@ public class Layout5 extends Activity {
 	*/
 
 	//读取景点信息列表
-  	private ArrayList<Meohe> mlist() {
+  	private ArrayList<ScenicSpot> mlist() {
   		String s = "";
-  		ArrayList<Meohe> aList = new ArrayList<Meohe>();// 景点信息列表
+  		ArrayList<ScenicSpot> aList = new ArrayList<ScenicSpot>();// 景点信息列表
   		String[] temp = new String[3];
   		InputStream in=null;
   		try {
@@ -126,7 +126,7 @@ public class Layout5 extends Activity {
   			BufferedReader bfr = new BufferedReader(new InputStreamReader(in));
   			while ((s = bfr.readLine()) != null) {
   				temp = s.split(",");
-  				aList.add(new Meohe(temp[0], temp[1], temp[2],temp[3],temp[4]));
+  				aList.add(new ScenicSpot(temp[0], temp[1], temp[2],temp[3],temp[4]));
   			}
   			bfr.close();
   			in.close();
@@ -228,7 +228,7 @@ public class Layout5 extends Activity {
             Txtview2.setText("搜索到:"+sum+"颗卫星");
             String Scenicnum=null;
             String ScenicName=null;
-            for (Meohe m : list) {
+            for (ScenicSpot m : list) {
     			if(location.getLongitude()+0.0002>m.getLongitude()&&location.getLongitude()-0.0002<m.getLongitude()&&location.getLatitude()+0.0002>m.getLatitude()&&location.getLatitude()-0.0002<m.getLatitude()){
     				Scenicnum=m.getN();
     			}

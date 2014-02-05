@@ -1,4 +1,4 @@
-package com.seventh.util;
+package com.seventh.intelligentguide.util;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -8,15 +8,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-
-
-
-import com.seventh.R;
-import com.seventh.main.Index;
-import com.seventh.tabhost.Layout1;
-import com.seventh.tabhost.MyTabHostFive;
-import com.seventh.tabhost.PlaceList;
-import com.seventh.vo.Meohe;
+import com.seventh.intelligentguide.Index;
+import com.seventh.intelligentguide.R;
+import com.seventh.intelligentguide.tabhost.Layout1;
+import com.seventh.intelligentguide.tabhost.MyTabHostFive;
+import com.seventh.intelligentguide.tabhost.PlaceList;
+import com.seventh.intelligentguide.vo.ScenicSpot;
 
 import android.app.Activity;
 import android.content.Context;
@@ -48,7 +45,7 @@ public class Player extends Activity {
 	private String nowfile="";
 	private String lastfilen="";
 	private String nextfilen="";
-	ArrayList<Meohe> plist;//景点列表
+	ArrayList<ScenicSpot> plist;//景点列表
 	
 	ImageView imagev;
 	Bitmap bmp;
@@ -190,7 +187,7 @@ public class Player extends Activity {
 	private void drawbmp(){
 		Bitmap bitmap=bmp;
 		if(PlaceList.file.equals("01泰山")||PlaceList.file.equals("01taishan")||PlaceList.file.equals("02岱庙")||PlaceList.file.equals("02daimiao")){
-			for (Meohe m : plist) {
+			for (ScenicSpot m : plist) {
 				if(nowfile.indexOf(".")>0&&nowfile.substring(0, nowfile.indexOf(".")).equals(m.getN())){
 					x=m.getX();
 					y=m.getY();
@@ -225,9 +222,9 @@ public class Player extends Activity {
 
 	
 	//读取景点信息列表
-	private ArrayList<Meohe> list() {
+	private ArrayList<ScenicSpot> list() {
 		String s = "";
-		ArrayList<Meohe> aList = new ArrayList<Meohe>();// 景点信息列表
+		ArrayList<ScenicSpot> aList = new ArrayList<ScenicSpot>();// 景点信息列表
 		String[] temp = new String[5];
 		InputStream in=null;
 		try {
@@ -241,7 +238,7 @@ public class Player extends Activity {
 			BufferedReader bfr = new BufferedReader(new InputStreamReader(in));
 			while ((s = bfr.readLine()) != null) {
 				temp = s.split(",");
-				aList.add(new Meohe(temp[0], temp[1], temp[2], temp[3], temp[4]));
+				aList.add(new ScenicSpot(temp[0], temp[1], temp[2], temp[3], temp[4]));
 			}
 			bfr.close();
 			in.close();

@@ -1,6 +1,6 @@
-package com.seventh.tabhost;
+package com.seventh.intelligentguide.tabhost;
 
-import com.seventh.R;
+import com.seventh.intelligentguide.R;
 
 import android.app.TabActivity;
 import android.content.Intent;

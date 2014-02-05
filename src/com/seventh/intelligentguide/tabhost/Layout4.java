@@ -1,11 +1,11 @@
-package com.seventh.tabhost;
+package com.seventh.intelligentguide.tabhost;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import com.seventh.R;
-import com.seventh.util.Player;
+import com.seventh.intelligentguide.R;
+import com.seventh.intelligentguide.util.Player;
 
 import android.app.Activity;
 import android.content.Intent;

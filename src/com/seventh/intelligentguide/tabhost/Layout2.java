@@ -1,7 +1,7 @@
-package com.seventh.tabhost;
+package com.seventh.intelligentguide.tabhost;
 
-import com.seventh.R;
-import com.seventh.util.Player;
+import com.seventh.intelligentguide.R;
+import com.seventh.intelligentguide.util.Player;
 
 import android.os.Bundle;
 import android.app.Activity;

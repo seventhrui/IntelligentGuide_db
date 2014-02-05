@@ -1,6 +1,15 @@
-package com.seventh.vo;
+package com.seventh.intelligentguide.vo;
 
-public class Meohe {
+/**
+ * 景点类
+ * @author rui
+ * 在图片上的x坐标
+ * 在图片上的y坐标
+ * 经度
+ * 纬度
+ * 景点名
+ */
+public class ScenicSpot {
 	private int x;//x坐标
 	private int y;//y坐标
 	private double longitude;//经度
@@ -37,7 +46,7 @@ public class Meohe {
 		this.n = n;
 	}
 	
-	public Meohe(String x, String y, String longitude, String latitude, String n){
+	public ScenicSpot(String x, String y, String longitude, String latitude, String n){
 		this.x=Integer.parseInt(x);
 		this.y=Integer.parseInt(y);
 		this.longitude=Double.parseDouble(longitude);

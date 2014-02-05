@@ -1,4 +1,4 @@
-package com.seventh.main;
+package com.seventh.intelligentguide;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -15,9 +15,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.seventh.R;
-import com.seventh.tabhost.Layout1;
-import com.seventh.tabhost.PlaceList;
+import com.seventh.intelligentguide.db.GuideSQLiteOpenHelper;
+import com.seventh.intelligentguide.tabhost.Layout1;
+import com.seventh.intelligentguide.tabhost.PlaceList;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -25,7 +25,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -74,7 +73,6 @@ public class Index extends Activity {
 				try {
 					Date curDate = sdf.parse(logList.get(0));
 					long lo = 0;
-					Log.v(null, "当前时间：" + nowDate + ",比较时间" + curDate);
 					lo = (nowDate.getTime() - curDate.getTime()) / 1000 / 60
 							/ 60 / 24;
 					if (lo >= 4 || lo <= -4) {
@@ -87,6 +85,9 @@ public class Index extends Activity {
 				}
 			}
 		}
+		//创建数据库
+		GuideSQLiteOpenHelper bussqlhepler =new GuideSQLiteOpenHelper(this);
+		bussqlhepler.createDataBase();
 	}
 	/**
 	 * 跳转到地点列表

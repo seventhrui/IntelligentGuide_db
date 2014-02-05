@@ -1,18 +1,20 @@
-package com.seventh.tabhost;
+package com.seventh.intelligentguide.tabhost;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.seventh.R;
-import com.seventh.main.Index;
-import com.seventh.util.Player;
+import com.seventh.intelligentguide.R;
+import com.seventh.intelligentguide.Index;
+import com.seventh.intelligentguide.dao.impl.IntelligentGuideDaoImpl;
+import com.seventh.intelligentguide.util.Player;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -66,6 +68,11 @@ public class Layout1 extends Activity {
 		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 				long arg3) {
 			Toast.makeText(getApplicationContext(), R.string.waiting, 1).show();
+			
+			IntelligentGuideDaoImpl igdi=new IntelligentGuideDaoImpl(getApplicationContext());
+			String string=igdi.findScenicNumber("0");
+			Log.v(null, "Êä³öµÄ£º"+string);
+			
 			MyTabHostFive.strText = ((TextView)arg1).getText().toString();
 			Intent in = new Intent(Layout1.this, Player.class);
 			startActivity(in);
