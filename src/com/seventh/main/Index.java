@@ -106,7 +106,6 @@ public class Index extends Activity {
 	
 	/**
 	 * 检查资源完整性(判断文件是否存在)
-	 * 
 	 * @param file
 	 * @return boolean
 	 */
@@ -116,7 +115,6 @@ public class Index extends Activity {
 
 	/**
 	 * 判断文件是否为空
-	 * 
 	 * @param file
 	 * @return boolean
 	 * @throws Exception
