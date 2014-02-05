@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import com.seventh.R;
-import com.seventh.main.daoyouqi;
 import com.seventh.util.Player;
 import com.seventh.vo.Meohe;
 
@@ -64,10 +63,10 @@ public class Layout3 extends Activity implements OnTouchListener {
 		setContentView(R.layout.layout3);
 		plist=list();
 		imgView = (ImageView) findViewById(R.id.imag);// ªÒ»°øÿº˛
-		if(daoyouqi.file.equals("01Ã©…Ω")||daoyouqi.file.equals("01taishan"))
+		if(PlaceList.file.equals("01Ã©…Ω")||PlaceList.file.equals("01taishan"))
 		//if(zhongmeng.file.equals("taishan"))
 			map=readBitMap(this,R.drawable.ts);
-		else if(daoyouqi.file.equals("02·∑√Ì")||daoyouqi.file.equals("02daimiao"))
+		else if(PlaceList.file.equals("02·∑√Ì")||PlaceList.file.equals("02daimiao"))
 		//else if(zhongmeng.file.equals("daimiao"))
 			map=readBitMap(this,R.drawable.dm);
 		else
@@ -272,10 +271,10 @@ public class Layout3 extends Activity implements OnTouchListener {
 		String[] temp = new String[5];
 		InputStream in=null;
 		try {
-			if(daoyouqi.file.equals("01Ã©…Ω")||daoyouqi.file.equals("01taishan"))
+			if(PlaceList.file.equals("01Ã©…Ω")||PlaceList.file.equals("01taishan"))
 			//if(zhongmeng.file.equals("taishan"))
 				in = getResources().getAssets().open("taishan.sce");
-			else if(daoyouqi.file.equals("02·∑√Ì")||daoyouqi.file.equals("02daimiao"))
+			else if(PlaceList.file.equals("02·∑√Ì")||PlaceList.file.equals("02daimiao"))
 			//else if(zhongmeng.file.equals("daimiao"))
 				in = getResources().getAssets().open("daimiao.sce");
 			//Log.v("≤‚ ‘", zhongmeng.file+".sce");

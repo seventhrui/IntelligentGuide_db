@@ -10,11 +10,12 @@ import java.util.ArrayList;
 
 
 
+
 import com.seventh.R;
 import com.seventh.main.Index;
-import com.seventh.main.daoyouqi;
 import com.seventh.tabhost.Layout1;
 import com.seventh.tabhost.MyTabHostFive;
+import com.seventh.tabhost.PlaceList;
 import com.seventh.vo.Meohe;
 
 import android.app.Activity;
@@ -60,13 +61,13 @@ public class Player extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.player);
         
-        folder=daoyouqi.file;
+        folder=PlaceList.file;
         plist=list();
         
-        if(daoyouqi.file.equals("01Ã©…Ω")||daoyouqi.file.equals("01taishan"))
+        if(PlaceList.file.equals("01Ã©…Ω")||PlaceList.file.equals("01taishan"))
 		//if(zhongmeng.file.equals("taishan"))
         	bmp=readBitMap(this,R.drawable.ts);
-		else if(daoyouqi.file.equals("02·∑√Ì")||daoyouqi.file.equals("02daimiao"))
+		else if(PlaceList.file.equals("02·∑√Ì")||PlaceList.file.equals("02daimiao"))
 		//else if(zhongmeng.file.equals("daimiao"))
 			bmp=readBitMap(this,R.drawable.dm);
 		else
@@ -188,7 +189,7 @@ public class Player extends Activity {
 	
 	private void drawbmp(){
 		Bitmap bitmap=bmp;
-		if(daoyouqi.file.equals("01Ã©…Ω")||daoyouqi.file.equals("01taishan")||daoyouqi.file.equals("02·∑√Ì")||daoyouqi.file.equals("02daimiao")){
+		if(PlaceList.file.equals("01Ã©…Ω")||PlaceList.file.equals("01taishan")||PlaceList.file.equals("02·∑√Ì")||PlaceList.file.equals("02daimiao")){
 			for (Meohe m : plist) {
 				if(nowfile.indexOf(".")>0&&nowfile.substring(0, nowfile.indexOf(".")).equals(m.getN())){
 					x=m.getX();
@@ -230,10 +231,10 @@ public class Player extends Activity {
 		String[] temp = new String[5];
 		InputStream in=null;
 		try {
-			if(daoyouqi.file.equals("01Ã©…Ω")||daoyouqi.file.equals("01taishan"))
+			if(PlaceList.file.equals("01Ã©…Ω")||PlaceList.file.equals("01taishan"))
 			//if(zhongmeng.file.equals("taishan"))
 				in = getResources().getAssets().open("taishan.sce");
-			else if(daoyouqi.file.equals("02·∑√Ì")||daoyouqi.file.equals("02daimiao"))
+			else if(PlaceList.file.equals("02·∑√Ì")||PlaceList.file.equals("02daimiao"))
 			//else if(zhongmeng.file.equals("daimiao"))
 				in = getResources().getAssets().open("daimiao.sce");
 			

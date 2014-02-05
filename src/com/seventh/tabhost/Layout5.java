@@ -12,7 +12,6 @@ import java.util.List;
 
 import com.seventh.R;
 import com.seventh.main.Index;
-import com.seventh.main.daoyouqi;
 import com.seventh.vo.Meohe;
 
 import android.app.Activity;
@@ -118,10 +117,10 @@ public class Layout5 extends Activity {
   		String[] temp = new String[3];
   		InputStream in=null;
   		try {
-  			if(daoyouqi.file.equals("01Ã©…Ω")||daoyouqi.file.equals("01taishan"))//µÁƒ‘≤‚ ‘
+  			if(PlaceList.file.equals("01Ã©…Ω")||PlaceList.file.equals("01taishan"))//µÁƒ‘≤‚ ‘
   			//if(zhongmeng.file.equals("Ã©…Ω"))// ÷ª˙≤‚ ‘
   				in = getResources().getAssets().open("taishan.sce");
-  			else if(daoyouqi.file.equals("02·∑√Ì")||daoyouqi.file.equals("02daimiao"))//µÁƒ‘≤‚ ‘
+  			else if(PlaceList.file.equals("02·∑√Ì")||PlaceList.file.equals("02daimiao"))//µÁƒ‘≤‚ ‘
   			//else if(zhongmeng.file.equals("·∑√Ì"))// ÷ª˙≤‚ ‘
   				in = getResources().getAssets().open("daimiao.sce");
   			BufferedReader bfr = new BufferedReader(new InputStreamReader(in));
@@ -309,7 +308,7 @@ public class Layout5 extends Activity {
 	}
 	private void play2(String file){
 		String filename=file+".grv";
-		File src = new File(Environment.getExternalStorageDirectory()+"/dao/"+Index.place_file+"/"+daoyouqi.file+"/"+filename);
+		File src = new File(Environment.getExternalStorageDirectory()+"/dao/"+Index.place_file+"/"+PlaceList.file+"/"+filename);
 		File dest = new File(Environment.getExternalStorageDirectory()+"/dao/play.mp3");
 		try {
 			xorEn(src, dest);

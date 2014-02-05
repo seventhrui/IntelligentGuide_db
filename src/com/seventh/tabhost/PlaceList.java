@@ -1,4 +1,4 @@
-package com.seventh.main;
+package com.seventh.tabhost;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -6,8 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.seventh.R;
-import com.seventh.tabhost.Layout1;
-import com.seventh.tabhost.MyTabHostFive;
+import com.seventh.main.Index;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -20,7 +19,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class daoyouqi extends Activity {
+public class PlaceList extends Activity {
 
 	private List<String> szone = new ArrayList<String>();
 	public static String activityTitle = "";// æ∞µ„±ÍÃ‚
@@ -80,7 +79,7 @@ public class daoyouqi extends Activity {
 			Layout1.assetsList.clear();
 			activityTitle = ((TextView) arg1).getText().toString();
 			file = activityTitle;
-			Intent in = new Intent(daoyouqi.this, MyTabHostFive.class);
+			Intent in = new Intent(PlaceList.this, MyTabHostFive.class);
 			startActivity(in);
 		}
 	}

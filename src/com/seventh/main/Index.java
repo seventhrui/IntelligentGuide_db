@@ -17,6 +17,7 @@ import java.util.List;
 
 import com.seventh.R;
 import com.seventh.tabhost.Layout1;
+import com.seventh.tabhost.PlaceList;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -212,7 +213,7 @@ public class Index extends Activity {
 			Layout1.assetsList.clear();
 			placeTitle = ((TextView) arg1).getText().toString();
 			place_file = placeTitle;
-			Intent in = new Intent(Index.this, daoyouqi.class);
+			Intent in = new Intent(Index.this, PlaceList.class);
 			startActivity(in);
 		}
 	}

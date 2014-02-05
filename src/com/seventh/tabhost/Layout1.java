@@ -7,7 +7,6 @@ import java.util.List;
 
 import com.seventh.R;
 import com.seventh.main.Index;
-import com.seventh.main.daoyouqi;
 import com.seventh.util.Player;
 
 import android.app.Activity;
@@ -32,13 +31,13 @@ public class Layout1 extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout1);
         
-        filename=daoyouqi.file;
+        filename=PlaceList.file;
         
         Intent mainIntent = new Intent("android.intent.action.SQUARE", null);
         mainIntent.addCategory("android.intent.category.SQUARE");
         
         TextView titleTextView=(TextView) this.findViewById(R.id.text_layout1);
-        titleTextView.setText(daoyouqi.activityTitle);
+        titleTextView.setText(PlaceList.activityTitle);
         ListView lv = (ListView)this.findViewById(R.id.lv);
         assetsList=getData(filename);
         lv.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1,assetsList));
