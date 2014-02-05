@@ -119,7 +119,7 @@ public class Index extends Activity {
 	 * 
 	 * @param file
 	 * @return boolean
-	 * @throws IOException
+	 * @throws Exception
 	 */
 	private boolean fileIsNull(File file) {
 		FileInputStream fis = null;
@@ -254,7 +254,6 @@ public class Index extends Activity {
 
 	/**
 	 * µ¯³ö¿ò
-	 * 
 	 * @param message
 	 * @param action
 	 */

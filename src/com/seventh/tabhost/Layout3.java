@@ -7,8 +7,8 @@ import java.util.ArrayList;
 
 import com.seventh.R;
 import com.seventh.main.daoyouqi;
-import com.seventh.util.Meohe;
 import com.seventh.util.Player;
+import com.seventh.vo.Meohe;
 
 import android.app.Activity;
 import android.content.Context;

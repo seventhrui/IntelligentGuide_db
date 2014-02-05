@@ -13,7 +13,7 @@ import java.util.List;
 import com.seventh.R;
 import com.seventh.main.Index;
 import com.seventh.main.daoyouqi;
-import com.seventh.util.Meohe;
+import com.seventh.vo.Meohe;
 
 import android.app.Activity;
 import android.content.Context;

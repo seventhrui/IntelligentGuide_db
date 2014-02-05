@@ -1,4 +1,4 @@
-package com.seventh.util;
+package com.seventh.vo;
 
 public class Meohe {
 	private int x;//x×ø±ê
