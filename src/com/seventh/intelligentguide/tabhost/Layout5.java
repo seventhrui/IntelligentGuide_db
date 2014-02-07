@@ -60,9 +60,6 @@ public class Layout5 extends Activity {
         
         mediaPlayer =new MediaPlayer();
         list=mlist();
-        /*for(Meohe m:list){
-        	Log.i("ап╠М", m.getN());
-        }*/
         
         Txtview1=(TextView)findViewById(R.id.jingdu);
         Txtview2=(TextView)findViewById(R.id.weidu);

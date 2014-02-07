@@ -14,7 +14,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -70,8 +69,9 @@ public class Layout1 extends Activity {
 			Toast.makeText(getApplicationContext(), R.string.waiting, 1).show();
 			
 			IntelligentGuideDaoImpl igdi=new IntelligentGuideDaoImpl(getApplicationContext());
-			String string=igdi.findScenicNumber("0");
-			Log.v(null, "输出的："+string);
+			//String string=igdi.findScenicNumber("0");
+			igdi.searchCityList();
+			//Log.v(null, "输出的："+string);
 			
 			MyTabHostFive.strText = ((TextView)arg1).getText().toString();
 			Intent in = new Intent(Layout1.this, Player.class);
