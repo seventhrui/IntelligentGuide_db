@@ -1,11 +1,10 @@
 package com.seventh.intelligentguide.tabhost;
 
-import java.io.BufferedReader;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import com.seventh.intelligentguide.R;
+import com.seventh.intelligentguide.dao.impl.IntelligentGuideDaoImpl;
 import com.seventh.intelligentguide.util.Player;
 import com.seventh.intelligentguide.vo.ScenicSpot;
 
@@ -50,8 +49,6 @@ public class Layout3 extends Activity implements OnTouchListener {
 	static final int SPACE = 15; // 精确度
 	int mode = NONE;
 
-	private String keyString = "";// 景点信息
-
 	PointF prev = new PointF();
 	PointF mid = new PointF();
 
@@ -61,13 +58,14 @@ public class Layout3 extends Activity implements OnTouchListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout3);
-		plist=list();
+		
+		IntelligentGuideDaoImpl igdi=new IntelligentGuideDaoImpl(getApplicationContext());
+		plist=(ArrayList<ScenicSpot>) igdi.searchSpotsList(PlaceList.file);
+		
 		imgView = (ImageView) findViewById(R.id.imag);// 获取控件
-		if(PlaceList.file.equals("01泰山")||PlaceList.file.equals("01taishan"))
-		//if(zhongmeng.file.equals("taishan"))
+		if(PlaceList.file.equals("泰山")||PlaceList.file.equals("01taishan"))
 			map=readBitMap(this,R.drawable.ts);
-		else if(PlaceList.file.equals("02岱庙")||PlaceList.file.equals("02daimiao"))
-		//else if(zhongmeng.file.equals("daimiao"))
+		else if(PlaceList.file.equals("岱庙")||PlaceList.file.equals("02daimiao"))
 			map=readBitMap(this,R.drawable.dm);
 		else
 			map=readBitMap(this,R.drawable.icon);
@@ -78,7 +76,6 @@ public class Layout3 extends Activity implements OnTouchListener {
 		minZoom();
 		center();
 		imgView.setImageMatrix(matrix);
-		
 	}
 	
 	//获取图片
@@ -146,34 +143,38 @@ public class Layout3 extends Activity implements OnTouchListener {
 	 * 检测点击位置
 	 * @param event
 	 */
-	private void checkPoint(MotionEvent event) {
+	private void checkPoint(MotionEvent event){
+		String temp=null;
+		
+		Intent mainIntent = new Intent("android.intent.action.SQUARE", null);
+		mainIntent.addCategory("android.intent.category.SQUARE");
+		Intent in = new Intent(Layout3.this, Player.class);
+		temp=getScenicName(event);
+		if(temp!=null){
+			String SpotsName=getScenicName(event);
+			MyTabHostFive.strText = SpotsName;
+			Toast.makeText(getApplicationContext(), R.string.waiting, 1).show();
+			startActivity(in);
+		}
+	}
+	/**
+	 * 获取当前点的景点名
+	 * @param event
+	 * @return
+	 */
+	private String getScenicName(MotionEvent event){
+		String SpotsName=null;
 		float[] coords = new float[] { event.getX(), event.getY() };
 		Matrix matrix2 = new Matrix();
 		this.imgView.getImageMatrix().invert(matrix2);
 		matrix2.postTranslate(this.imgView.getScrollX(),
 				this.imgView.getScrollY());
 		matrix2.mapPoints(coords);
-
-		for (ScenicSpot m : plist) {
-			if (m.getX() + SPACE >= coords[0] && m.getX() - SPACE <= coords[0]
-					&& m.getY() + SPACE >= coords[1] && m.getY() - SPACE <= coords[1]) {
-				Toast.makeText(getApplicationContext(), R.string.waiting, 1)
-						.show();
-				Intent mainIntent = new Intent("android.intent.action.SQUARE", null);
-				mainIntent.addCategory("android.intent.category.SQUARE");
-				Intent in = new Intent(Layout3.this, Player.class);
-				for (Object o : Layout1.assetsList) {
-					if (o.toString().startsWith(m.getN() + ".")) {
-						keyString = o.toString();
-					}
-				}
-				MyTabHostFive.strText = keyString;
-				startActivity(in);
-				keyString = "";
-			}
-		}
+		
+		IntelligentGuideDaoImpl igdi=new IntelligentGuideDaoImpl(getApplicationContext());
+		SpotsName=igdi.getSpotsNameByXandY(PlaceList.file, coords[0], coords[1]);
+		return SpotsName;
 	}
-	
 	/**
 	 * 限制最大最小缩放比例，自动居中
 	 */
@@ -263,32 +264,5 @@ public class Layout3 extends Activity implements OnTouchListener {
 		float x = event.getX(0) + event.getX(1);
 		float y = event.getY(0) + event.getY(1);
 		point.set(x / 2, y / 2);
-	}
-	//读取景点信息列表
-	private ArrayList<ScenicSpot> list() {
-		String s = "";
-		ArrayList<ScenicSpot> aList = new ArrayList<ScenicSpot>();// 景点信息列表
-		String[] temp = new String[5];
-		InputStream in=null;
-		try {
-			if(PlaceList.file.equals("01泰山")||PlaceList.file.equals("01taishan"))
-			//if(zhongmeng.file.equals("taishan"))
-				in = getResources().getAssets().open("taishan.sce");
-			else if(PlaceList.file.equals("02岱庙")||PlaceList.file.equals("02daimiao"))
-			//else if(zhongmeng.file.equals("daimiao"))
-				in = getResources().getAssets().open("daimiao.sce");
-			//Log.v("测试", zhongmeng.file+".sce");
-			BufferedReader bfr = new BufferedReader(new InputStreamReader(in));
-			while ((s = bfr.readLine()) != null) {
-				//Log.v(null, s);
-				temp = s.split(",");
-				aList.add(new ScenicSpot(temp[0], temp[1], temp[2],temp[3], temp[4]));
-			}
-			bfr.close();
-			in.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return aList;
 	}
 }

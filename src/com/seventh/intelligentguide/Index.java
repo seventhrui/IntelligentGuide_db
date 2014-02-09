@@ -12,12 +12,12 @@ import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import com.seventh.intelligentguide.db.GuideSQLiteOpenHelper;
+import com.seventh.intelligentguide.dao.impl.IntelligentGuideDaoImpl;
 import com.seventh.intelligentguide.tabhost.Layout1;
 import com.seventh.intelligentguide.tabhost.PlaceList;
+import com.seventh.intelligentguide.util.AssetsDatabaseManager;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -53,7 +53,15 @@ public class Index extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.index);
-
+		
+		// 初始化，只需要调用一次
+		AssetsDatabaseManager.initManager(getApplication());
+		// 获取管理对象，因为数据库需要通过管理对象才能够获取
+		AssetsDatabaseManager mg = AssetsDatabaseManager.getManager();
+		// 通过管理对象获取数据库
+		//SQLiteDatabase db1 = 
+		mg.getDatabase("jingdian.db");
+		
 		sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		nowDate = new Date(System.currentTimeMillis());
 		timestr = sdf.format(nowDate);
@@ -85,15 +93,13 @@ public class Index extends Activity {
 				}
 			}
 		}
-		//创建数据库
-		GuideSQLiteOpenHelper bussqlhepler =new GuideSQLiteOpenHelper(this);
-		bussqlhepler.createDataBase();
 	}
 	/**
 	 * 跳转到地点列表
 	 */
 	private void goToPlace(){
-		place = getPlace();
+		IntelligentGuideDaoImpl igdi=new IntelligentGuideDaoImpl(getApplicationContext());
+		place=igdi.searchCityList();
 		Intent mainIntent = new Intent(
 				"android.intent.action.SQUARE", null);
 		mainIntent
@@ -182,37 +188,15 @@ public class Index extends Activity {
 		return readList;
 	}
 
-	/**
-	 * 获取地区列表
-	 * 
-	 * @return
-	 */
-	private List<String> getPlace() {
-		List<String> folderlist = new ArrayList<String>();
-		try {
-			String filePath = Environment.getExternalStorageDirectory()
-					.getAbsolutePath() + "/dao/";
-			File file = new File(filePath);
-			File[] files = file.listFiles();
-			Arrays.sort(files);
-
-			for (File mCurrentFile : files) {
-				if (mCurrentFile.isDirectory()) {
-					folderlist.add(mCurrentFile.getName());
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return folderlist;
-	}
-
 	public class ItemClickListener implements OnItemClickListener {
 		@Override
 		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 				long arg3) {
 			Layout1.assetsList.clear();
 			placeTitle = ((TextView) arg1).getText().toString();
+			/*if (placeTitle.equals("泰安")) {
+				place_file = "taian";
+			}*/
 			place_file = placeTitle;
 			Intent in = new Intent(Index.this, PlaceList.class);
 			startActivity(in);

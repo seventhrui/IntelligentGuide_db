@@ -1,15 +1,13 @@
 package com.seventh.intelligentguide.util;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-import com.seventh.intelligentguide.Index;
 import com.seventh.intelligentguide.R;
+import com.seventh.intelligentguide.dao.impl.IntelligentGuideDaoImpl;
 import com.seventh.intelligentguide.tabhost.Layout1;
 import com.seventh.intelligentguide.tabhost.MyTabHostFive;
 import com.seventh.intelligentguide.tabhost.PlaceList;
@@ -26,6 +24,7 @@ import android.os.Environment;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -37,15 +36,16 @@ public class Player extends Activity {
 	public static TextView nameText;
 	public static TextView lastnameText;
 	public static TextView nextnameText;
-	private String folder;//音频文件夹名
 	private String path;//文件路径
 	private MediaPlayer mediaPlayer;//多媒体播放
 	private boolean pause;//暂停标志
 	private int postion;//记录播放位置
-	private String nowfile="";
+	private String nowfile="";//当前播放文件名
 	private String lastfilen="";
 	private String nextfilen="";
 	ArrayList<ScenicSpot> plist;//景点列表
+	
+	private ScenicSpot ss=null;
 	
 	ImageView imagev;
 	Bitmap bmp;
@@ -58,14 +58,13 @@ public class Player extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.player);
         
-        folder=PlaceList.file;
-        plist=list();
+        IntelligentGuideDaoImpl igdi=new IntelligentGuideDaoImpl(getApplicationContext());
+        plist=(ArrayList<ScenicSpot>) igdi.searchSpotsList(PlaceList.file);
         
-        if(PlaceList.file.equals("01泰山")||PlaceList.file.equals("01taishan"))
-		//if(zhongmeng.file.equals("taishan"))
+        
+        if(PlaceList.file.equals("泰山")||PlaceList.file.equals("01taishan"))
         	bmp=readBitMap(this,R.drawable.ts);
-		else if(PlaceList.file.equals("02岱庙")||PlaceList.file.equals("02daimiao"))
-		//else if(zhongmeng.file.equals("daimiao"))
+		else if(PlaceList.file.equals("岱庙")||PlaceList.file.equals("02daimiao"))
 			bmp=readBitMap(this,R.drawable.dm);
 		else
 			bmp=readBitMap(this,R.drawable.icon);
@@ -75,6 +74,9 @@ public class Player extends Activity {
         lastnameText = (TextView)this.findViewById(R.id.lastfilename);//当前播放上一个文件
         nextnameText = (TextView)this.findViewById(R.id.nextfilename);//当前播放下一个文件
         nowfile=MyTabHostFive.strText;
+        
+        Log.v("nowfile:", nowfile);
+        
         dealfile(nowfile);//设置播放文件名
         
         imagev=(ImageView) this.findViewById(R.id.imageView_player);
@@ -186,13 +188,10 @@ public class Player extends Activity {
 	
 	private void drawbmp(){
 		Bitmap bitmap=bmp;
-		if(PlaceList.file.equals("01泰山")||PlaceList.file.equals("01taishan")||PlaceList.file.equals("02岱庙")||PlaceList.file.equals("02daimiao")){
-			for (ScenicSpot m : plist) {
-				if(nowfile.indexOf(".")>0&&nowfile.substring(0, nowfile.indexOf(".")).equals(m.getN())){
-					x=m.getX();
-					y=m.getY();
-				}
-			}
+		
+		if(ss!=null){
+			x=ss.getX();
+			y=ss.getY();
 			if((x-hw)<(hw/2))
 				x=hw/2-5;
 			if(x+hw>bmp.getWidth())
@@ -220,33 +219,6 @@ public class Player extends Activity {
 		return BitmapFactory.decodeStream(is,null,opt);
 	}
 
-	
-	//读取景点信息列表
-	private ArrayList<ScenicSpot> list() {
-		String s = "";
-		ArrayList<ScenicSpot> aList = new ArrayList<ScenicSpot>();// 景点信息列表
-		String[] temp = new String[5];
-		InputStream in=null;
-		try {
-			if(PlaceList.file.equals("01泰山")||PlaceList.file.equals("01taishan"))
-			//if(zhongmeng.file.equals("taishan"))
-				in = getResources().getAssets().open("taishan.sce");
-			else if(PlaceList.file.equals("02岱庙")||PlaceList.file.equals("02daimiao"))
-			//else if(zhongmeng.file.equals("daimiao"))
-				in = getResources().getAssets().open("daimiao.sce");
-			
-			BufferedReader bfr = new BufferedReader(new InputStreamReader(in));
-			while ((s = bfr.readLine()) != null) {
-				temp = s.split(",");
-				aList.add(new ScenicSpot(temp[0], temp[1], temp[2], temp[3], temp[4]));
-			}
-			bfr.close();
-			in.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return aList;
-	}
 	/**
 	 * 播放方法
 	 */
@@ -262,9 +234,18 @@ public class Player extends Activity {
 	}
 	
 	private void play2(String file){
-		String filename=file+".grv";
-		File src = new File(Environment.getExternalStorageDirectory()+"/dao/"+Index.place_file+"/"+folder+"/"+filename);
+		////////////////////////////////////////////2014.2.8
+		IntelligentGuideDaoImpl igdi=new IntelligentGuideDaoImpl(getApplicationContext());
+		ss=igdi.searchSpotsBySpots_name(nowfile);
+		String filname=ss.getFile_name();
+		
+		Log.v("当前播放", nowfile);
+		
+		drawbmp();
+		File src = new File(Environment.getExternalStorageDirectory()+filname);
 		File dest = new File(Environment.getExternalStorageDirectory()+"/dao/play.mp3");
+		
+		Log.v("音频文件", src.getName());
 		
 		try {
 			xorEn(src, dest);

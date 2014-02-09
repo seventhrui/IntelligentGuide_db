@@ -1,6 +1,7 @@
 package com.seventh.intelligentguide.tabhost;
 
 import com.seventh.intelligentguide.R;
+import com.seventh.intelligentguide.dao.impl.IntelligentGuideDaoImpl;
 import com.seventh.intelligentguide.util.Player;
 
 import android.os.Bundle;
@@ -61,22 +62,12 @@ public class Layout2 extends Activity {
 				Intent mainIntent = new Intent("android.intent.action.SQUARE", null);
 		        mainIntent.addCategory("android.intent.category.SQUARE");
 		        Intent in = new Intent(Layout2.this, Player.class);
-		        int length=keyString.length();
-		        for(int i=0;i<3-length;i++)
-		        	keyString="0"+keyString;
-		        for(Object o:Layout1.assetsList){
-		        	if(o.toString().startsWith(keyString+".")){
-		        		keyString=o.toString();
-		        	}
-		        }
-		        if(keyString.indexOf(".")>0){
-		        	Toast.makeText(getApplicationContext(), R.string.waiting, 1).show();
-			        MyTabHostFive.strText=keyString;
-			        startActivity(in);
-		        }
-		        else {
-		        	Toast.makeText(getApplicationContext(), R.string.filenoexist, 1).show();
-				}
+		        
+		        IntelligentGuideDaoImpl igdi=new IntelligentGuideDaoImpl(getApplicationContext());
+		        String spots_name=igdi.getSpotsByNumber(PlaceList.file, keyString);
+		        MyTabHostFive.strText=spots_name;
+		        startActivity(in);
+
 		        keyString="请输入景点对应数字,按确定收听";
 				break;
 			case R.id.keypad_num_backspace:

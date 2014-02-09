@@ -1,17 +1,15 @@
 package com.seventh.intelligentguide.tabhost;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.seventh.intelligentguide.Index;
 import com.seventh.intelligentguide.R;
+import com.seventh.intelligentguide.dao.impl.IntelligentGuideDaoImpl;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -30,7 +28,9 @@ public class PlaceList extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		
-		szone = getData();//获取景点列表
+		IntelligentGuideDaoImpl igdi=new IntelligentGuideDaoImpl(getApplicationContext());
+		szone=igdi.searchScenicList(Index.place_file);
+		
 		//组织界面跳转
 		Intent mainIntent = new Intent("android.intent.action.SQUARE",
 				null);
@@ -42,30 +42,6 @@ public class PlaceList extends Activity {
 		zonglist.setOnItemClickListener(new ItemClickListener());
 	}
 	
-	/**
-	 * 获取景区列表(dao文件夹中的文件夹列表)
-	 * @return List<String> 景点列表
-	 */
-	private List<String> getData() {
-		List<String> folderlist = new ArrayList<String>();
-		try {
-			String filePath = Environment.getExternalStorageDirectory()
-					.getAbsolutePath() + "/dao/"+Index.place_file+"/";
-			File file = new File(filePath);
-			File[] files = file.listFiles();
-			Arrays.sort(files);
-
-			for (File mCurrentFile : files) {
-				if (mCurrentFile.isDirectory()) {
-					folderlist.add(mCurrentFile.getName());
-					//Log.v(null, mCurrentFile.getName());
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return folderlist;
-	}
 	/**
 	 * 列表点击事件
 	 * 点击后进入景区对应景点中

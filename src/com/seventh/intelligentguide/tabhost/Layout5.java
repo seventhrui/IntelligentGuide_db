@@ -1,17 +1,14 @@
 package com.seventh.intelligentguide.tabhost;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import com.seventh.intelligentguide.R;
-import com.seventh.intelligentguide.Index;
+import com.seventh.intelligentguide.dao.impl.IntelligentGuideDaoImpl;
 import com.seventh.intelligentguide.vo.ScenicSpot;
 
 import android.app.Activity;
@@ -59,7 +56,9 @@ public class Layout5 extends Activity {
         setContentView(R.layout.layout5);
         
         mediaPlayer =new MediaPlayer();
-        list=mlist();
+        
+        IntelligentGuideDaoImpl igdi=new IntelligentGuideDaoImpl(getApplicationContext());
+        list=(ArrayList<ScenicSpot>) igdi.searchSpotsList(PlaceList.file);
         
         Txtview1=(TextView)findViewById(R.id.jingdu);
         Txtview2=(TextView)findViewById(R.id.weidu);
@@ -95,43 +94,6 @@ public class Layout5 extends Activity {
         TelephonyManager telephonyManager=(TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
         telephonyManager.listen(new MyPhoneListener(), PhoneStateListener.LISTEN_CALL_STATE); 
     }
-    
-    /*
-	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		if(mediaPlayer.isPlaying())
-			mediaPlayer.stop();
-		else
-			mediaPlayer.start();
-		return super.onTouchEvent(event);
-	}
-	*/
-
-	//读取景点信息列表
-  	private ArrayList<ScenicSpot> mlist() {
-  		String s = "";
-  		ArrayList<ScenicSpot> aList = new ArrayList<ScenicSpot>();// 景点信息列表
-  		String[] temp = new String[3];
-  		InputStream in=null;
-  		try {
-  			if(PlaceList.file.equals("01泰山")||PlaceList.file.equals("01taishan"))//电脑测试
-  			//if(zhongmeng.file.equals("泰山"))//手机测试
-  				in = getResources().getAssets().open("taishan.sce");
-  			else if(PlaceList.file.equals("02岱庙")||PlaceList.file.equals("02daimiao"))//电脑测试
-  			//else if(zhongmeng.file.equals("岱庙"))//手机测试
-  				in = getResources().getAssets().open("daimiao.sce");
-  			BufferedReader bfr = new BufferedReader(new InputStreamReader(in));
-  			while ((s = bfr.readLine()) != null) {
-  				temp = s.split(",");
-  				aList.add(new ScenicSpot(temp[0], temp[1], temp[2],temp[3],temp[4]));
-  			}
-  			bfr.close();
-  			in.close();
-  		} catch (Exception e) {
-  			e.printStackTrace();
-  		}
-  		return aList;
-  	}
     
     //位置监听
     private LocationListener locationListener=new LocationListener() {
@@ -223,17 +185,13 @@ public class Layout5 extends Activity {
         if(location!=null){
             Txtview1.setText("经度:"+String.valueOf(location.getLongitude())+","+"纬度:"+String.valueOf(location.getLatitude()));
             Txtview2.setText("搜索到:"+sum+"颗卫星");
-            String Scenicnum=null;
+            //String Scenicnum=null;
             String ScenicName=null;
-            for (ScenicSpot m : list) {
-    			if(location.getLongitude()+0.0002>m.getLongitude()&&location.getLongitude()-0.0002<m.getLongitude()&&location.getLatitude()+0.0002>m.getLatitude()&&location.getLatitude()-0.0002<m.getLatitude()){
-    				Scenicnum=m.getN();
-    			}
-    		}
-            for(String s:Layout1.assetsList){
-            	if(s.startsWith(Scenicnum+"."))
-            		ScenicName=s;
-            }
+            
+            IntelligentGuideDaoImpl igdi=new IntelligentGuideDaoImpl(getApplicationContext());
+            ScenicSpot ss=igdi.getSpotsByLoandLa(PlaceList.file, location.getLongitude(), location.getLatitude());
+            ScenicName=ss.getSpots_name();
+            
             if(ScenicName!=null){
             	if(!nowVoiceName.equals(ScenicName)){
             		nowVoiceName=ScenicName;
@@ -274,23 +232,7 @@ public class Layout5 extends Activity {
         //Log.i(TAG, "定位方式："+criteria.toString());
         return criteria;
     }
-    /*
-    private List<Address> getAddressbyGeoPoint(Location location) {
-    	List<Address> result = null;
-    	// 先将Location转换为GeoPoint
-    	// GeoPoint gp=getGeoByLocation(location);  
-    	try {
-    		if (location != null) {
-    			// 获取Geocoder，通过Geocoder就可以拿到地址信息
-    			Geocoder gc = new Geocoder(this, Locale.getDefault());
-    			result= gc.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-    		}
-    	} catch (Exception e) {
-    		e.printStackTrace();
-    	}
-    	return result;
-	}
-    */
+
     private String path=null;//文件路径
 	public static MediaPlayer mediaPlayer=null;//多媒体播放
     private void play(int position) {
@@ -304,8 +246,11 @@ public class Layout5 extends Activity {
 		}
 	}
 	private void play2(String file){
-		String filename=file+".grv";
-		File src = new File(Environment.getExternalStorageDirectory()+"/dao/"+Index.place_file+"/"+PlaceList.file+"/"+filename);
+		IntelligentGuideDaoImpl igdi=new IntelligentGuideDaoImpl(getApplicationContext());
+		ScenicSpot ss=igdi.searchSpotsBySpots_name(file);
+		String filname=ss.getFile_name();
+		
+		File src = new File(Environment.getExternalStorageDirectory()+filname);
 		File dest = new File(Environment.getExternalStorageDirectory()+"/dao/play.mp3");
 		try {
 			xorEn(src, dest);
