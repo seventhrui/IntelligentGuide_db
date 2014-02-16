@@ -1,4 +1,4 @@
-package com.seventh.intelligentguide.tabhost;
+package com.seventh.intelligentguide.activity;
 
 import com.seventh.intelligentguide.R;
 
@@ -20,7 +20,8 @@ public class MyTabHostFive extends TabActivity {
 	
 	private TabHost mTabHost;
 	private TabWidget mTabWidget;
-	public static String strText;//用于返回音频名
+	//public static String strText;//用于返回音频名
+	private String scenicName=null;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -33,10 +34,15 @@ public class MyTabHostFive extends TabActivity {
 				mTabHost.getPaddingTop(), mTabHost.getPaddingRight(),
 				mTabHost.getPaddingBottom() - 5);
 		Resources rs = getResources();
-
+		
+		scenicName=getIntent().getStringExtra("scenicname");
+		Bundle bundle = new Bundle();  
+		bundle.putCharSequence( "scenicname", scenicName );
+		
 		// 选项一  景点列表
 		Intent layout1intent = new Intent();
 		layout1intent.setClass(this, Layout1.class);
+		layout1intent.putExtra("scenicname", scenicName);
 		TabHost.TabSpec layout1spec = mTabHost.newTabSpec("layout1");
 		layout1spec.setIndicator("", rs.getDrawable(android.R.drawable.ic_menu_agenda));
 		layout1spec.setContent(layout1intent);
@@ -45,6 +51,7 @@ public class MyTabHostFive extends TabActivity {
 		// 选项二  手动输入
 		Intent layout2intent = new Intent();
 		layout2intent.setClass(this, Layout2.class);
+		layout2intent.putExtra("scenicname", scenicName);
 		TabHost.TabSpec layout2spec = mTabHost.newTabSpec("layout2");
 		layout2spec.setIndicator("", rs.getDrawable(android.R.drawable.ic_menu_search));
 		layout2spec.setContent(layout2intent);
@@ -53,6 +60,7 @@ public class MyTabHostFive extends TabActivity {
 		// 选项三  地图
 		Intent layout3intent = new Intent();
 		layout3intent.setClass(this, Layout3.class);
+		layout3intent.putExtra("scenicname", scenicName);
 		TabHost.TabSpec layout3spec = mTabHost.newTabSpec("layout3");
 		layout3spec.setIndicator("", rs.getDrawable(android.R.drawable.ic_menu_mapmode));
 		layout3spec.setContent(layout3intent);
@@ -61,6 +69,7 @@ public class MyTabHostFive extends TabActivity {
 		// 选项四  语音识别
 		Intent layout4intent = new Intent();
 		layout4intent.setClass(this, Layout4.class);
+		layout4intent.putExtra("scenicname", scenicName);
 		TabHost.TabSpec layout4spec = mTabHost.newTabSpec("layout4");
 		layout4spec.setIndicator("", rs.getDrawable(android.R.drawable.ic_btn_speak_now));
 		layout4spec.setContent(layout4intent);
@@ -69,6 +78,7 @@ public class MyTabHostFive extends TabActivity {
 		// 选项五  GPS
 		Intent layout5intent = new Intent();
 		layout5intent.setClass(this, Layout5.class);
+		layout5intent.putExtra("scenicname", scenicName);
 		TabHost.TabSpec layout5spec = mTabHost.newTabSpec("layout5");
 		layout5spec.setIndicator("", rs.getDrawable(android.R.drawable.ic_menu_compass));
 		layout5spec.setContent(layout5intent);
@@ -115,5 +125,4 @@ public class MyTabHostFive extends TabActivity {
 			}
 		});
 	}
-	
 }

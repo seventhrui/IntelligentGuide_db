@@ -6,11 +6,10 @@ import java.util.List;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
+import com.seventh.intelligentguide.beans.ScenicSpotBean;
 import com.seventh.intelligentguide.dao.IntelligentGuideDao;
 import com.seventh.intelligentguide.db.GuideSQLiteOpenHelper;
-import com.seventh.intelligentguide.vo.ScenicSpot;
 
 public class IntelligentGuideDaoImpl implements IntelligentGuideDao {
 	private GuideSQLiteOpenHelper dbhelper;
@@ -32,9 +31,6 @@ public class IntelligentGuideDaoImpl implements IntelligentGuideDao {
 		}
 		cursor.close();
 		db.close();
-		for(String s:placelist){
-			Log.v("城市", s);
-		}
 		return placelist;
 	}
 
@@ -65,8 +61,8 @@ public class IntelligentGuideDaoImpl implements IntelligentGuideDao {
 	}
 	
 	@Override
-	public List<ScenicSpot> searchSpotsList(String Scenic_name){
-		List<ScenicSpot> spotslist = new ArrayList<ScenicSpot>(); 
+	public List<ScenicSpotBean> searchSpotsList(String Scenic_name){
+		List<ScenicSpotBean> spotslist = new ArrayList<ScenicSpotBean>(); 
 		cursor = db.rawQuery("SELECT Spots.Spots_id,Spots.Spots_name,Spots.Spots_X,Spots.Spots_Y,Spots.Spots_lo,Spots.Spots_la,Spots.Scenic_id,Spots.File_name FROM Spots,Scenic WHERE Scenic_name=? AND Spots.Scenic_id=Scenic.Scenic_id ORDER BY Spots_id", new String[]{Scenic_name});
 		while (cursor.moveToNext()) {
 			String s0 = cursor.getString(0);
@@ -77,15 +73,15 @@ public class IntelligentGuideDaoImpl implements IntelligentGuideDao {
 			String s5 = cursor.getString(5);
 			String s6 = cursor.getString(6);
 			String s7 = cursor.getString(7);
-			spotslist.add(new ScenicSpot(s0, s1, s2, s3, s4, s5, s6, s7));
+			spotslist.add(new ScenicSpotBean(s0, s1, s2, s3, s4, s5, s6, s7));
 		}
 		cursor.close();
 		db.close();
 		return spotslist;
 	}
 	@Override
-	public ScenicSpot searchSpotsBySpots_name(String Spots_name){
-		ScenicSpot ss=null;
+	public ScenicSpotBean searchSpotsBySpots_name(String Spots_name){
+		ScenicSpotBean ss=null;
 		cursor = db.rawQuery("SELECT * FROM Spots WHERE Spots_name=?", new String[]{Spots_name});
 		while (cursor.moveToNext()) {
 			String s0 = cursor.getString(0);
@@ -96,7 +92,7 @@ public class IntelligentGuideDaoImpl implements IntelligentGuideDao {
 			String s5 = cursor.getString(5);
 			String s6 = cursor.getString(6);
 			String s7 = cursor.getString(7);
-			ss=new ScenicSpot(s0, s1, s2, s3, s4, s5, s6, s7);
+			ss=new ScenicSpotBean(s0, s1, s2, s3, s4, s5, s6, s7);
 		}
 		return ss;
 	}
@@ -127,8 +123,8 @@ public class IntelligentGuideDaoImpl implements IntelligentGuideDao {
 	}
 	
 	@Override
-	public ScenicSpot getSpotsByLoandLa(String Scenic_name, double lo, double la) {
-		ScenicSpot ss=null;
+	public ScenicSpotBean getSpotsByLoandLa(String Scenic_name, double lo, double la) {
+		ScenicSpotBean ss=null;
 		cursor = db.rawQuery("SELECT Spots.Spots_id,Spots.Spots_name,Spots.Spots_X,Spots.Spots_Y,Spots.Spots_lo,Spots.Spots_la,Spots.Scenic_id,Spots.File_name FROM Spots,Scenic WHERE Scenic_name=? AND Spots.Scenic_id=Scenic.Scenic_id AND Spots.Spots_lo>? AND Spots.Spots_lo<? AND Spots.Spots_la>? AND Spots.Spots_la<?", new String[]{Scenic_name,String.valueOf(lo-0.0002),String.valueOf(lo+0.0002),String.valueOf(la-0.0002),String.valueOf(la+0.0002)});
 		while (cursor.moveToNext()) {
 			String s0 = cursor.getString(0);
@@ -139,7 +135,7 @@ public class IntelligentGuideDaoImpl implements IntelligentGuideDao {
 			String s5 = cursor.getString(5);
 			String s6 = cursor.getString(6);
 			String s7 = cursor.getString(7);
-			ss=new ScenicSpot(s0, s1, s2, s3, s4, s5, s6, s7);
+			ss=new ScenicSpotBean(s0, s1, s2, s3, s4, s5, s6, s7);
 		}
 		cursor.close();
 		db.close();
@@ -150,19 +146,17 @@ public class IntelligentGuideDaoImpl implements IntelligentGuideDao {
 	public String getSpotsNameByXandY(String Scenic_name, float x, float y) {
 		String spotsname = null;
 		cursor = db.rawQuery("SELECT Spots_name FROM Spots,Scenic WHERE Scenic_name=? AND Spots.Scenic_id=Scenic.Scenic_id AND Spots.Spots_x>?-15 AND Spots.Spots_x<?+15 AND Spots.Spots_y>?-15 AND Spots.Spots_y<?+15", new String[]{Scenic_name,String.valueOf(x-15),String.valueOf(x+15),String.valueOf(y-15),String.valueOf(y+15)});
-		Log.v("查询语句", cursor.toString());
 		while(cursor.moveToNext()){
 			spotsname=cursor.getString(0);
 		}
 		cursor.close();
 		db.close();
-		Log.v("查询结果", spotsname+"");
 		return spotsname;
 	}
 
 	@Override
-	public ScenicSpot getSpotsByXandY(String Scenic_name, float x, float y) {
-		ScenicSpot ss=null;
+	public ScenicSpotBean getSpotsByXandY(String Scenic_name, float x, float y) {
+		ScenicSpotBean ss=null;
 		cursor = db.rawQuery("SELECT Spots.Spots_id,Spots.Spots_name,Spots.Spots_X,Spots.Spots_Y,Spots.Spots_lo,Spots.Spots_la,Spots.Scenic_id,Spots.File_name FROM Spots,Scenic WHERE Scenic_name=? AND Spots.Scenic_id=Scenic.Scenic_id AND Spots.Spots_x>?-15 AND Spots.Spots_x<?+15 AND Spots.Spots_y>?-15 AND Spots.Spots_y<?+15", new String[]{Scenic_name,String.valueOf(x-15),String.valueOf(x+15),String.valueOf(y-15),String.valueOf(y+15)});
 		while (cursor.moveToNext()) {
 			String s0 = cursor.getString(0);
@@ -173,7 +167,7 @@ public class IntelligentGuideDaoImpl implements IntelligentGuideDao {
 			String s5 = cursor.getString(5);
 			String s6 = cursor.getString(6);
 			String s7 = cursor.getString(7);
-			ss=new ScenicSpot(s0, s1, s2, s3, s4, s5, s6, s7);
+			ss=new ScenicSpotBean(s0, s1, s2, s3, s4, s5, s6, s7);
 		}
 		cursor.close();
 		db.close();

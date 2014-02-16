@@ -5,13 +5,13 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.seventh.intelligentguide.R;
+import com.seventh.intelligentguide.activity.PlaceList;
+import com.seventh.intelligentguide.beans.ScenicSpotBean;
 import com.seventh.intelligentguide.dao.impl.IntelligentGuideDaoImpl;
-import com.seventh.intelligentguide.tabhost.Layout1;
-import com.seventh.intelligentguide.tabhost.MyTabHostFive;
-import com.seventh.intelligentguide.tabhost.PlaceList;
-import com.seventh.intelligentguide.vo.ScenicSpot;
+import com.seventh.intelligentguide.receiver.ActivityReceiver;
 
 import android.app.Activity;
 import android.content.Context;
@@ -24,7 +24,6 @@ import android.os.Environment;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -43,9 +42,10 @@ public class Player extends Activity {
 	private String nowfile="";//当前播放文件名
 	private String lastfilen="";
 	private String nextfilen="";
-	ArrayList<ScenicSpot> plist;//景点列表
 	
-	private ScenicSpot ss=null;
+	private ScenicSpotBean ss=null;
+	
+	private List<String> ssslist=new ArrayList<String>();//景点列表
 	
 	ImageView imagev;
 	Bitmap bmp;
@@ -58,9 +58,8 @@ public class Player extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.player);
         
-        IntelligentGuideDaoImpl igdi=new IntelligentGuideDaoImpl(getApplicationContext());
-        plist=(ArrayList<ScenicSpot>) igdi.searchSpotsList(PlaceList.file);
-        
+        ActivityReceiver br=new ActivityReceiver();
+        ssslist=br.getAssetsList();
         
         if(PlaceList.file.equals("泰山")||PlaceList.file.equals("01taishan"))
         	bmp=readBitMap(this,R.drawable.ts);
@@ -73,9 +72,8 @@ public class Player extends Activity {
         nameText.setInputType(EditorInfo.TYPE_CLASS_PHONE);
         lastnameText = (TextView)this.findViewById(R.id.lastfilename);//当前播放上一个文件
         nextnameText = (TextView)this.findViewById(R.id.nextfilename);//当前播放下一个文件
-        nowfile=MyTabHostFive.strText;
         
-        Log.v("nowfile:", nowfile);
+        nowfile=getIntent().getStringExtra("yinpin");
         
         dealfile(nowfile);//设置播放文件名
         
@@ -84,8 +82,8 @@ public class Player extends Activity {
         DisplayMetrics dm = getResources().getDisplayMetrics();
         final int screeWidth=dm.widthPixels;
         final int screeHeight=dm.heightPixels;
-        hw=Math.min(screeWidth, screeHeight);//取屏幕宽高中德最小值
-        drawbmp();
+        hw=Math.min(screeWidth, screeHeight);//取屏幕宽高中的最小值
+        drawBmp();
 		play2(nowfile);//播放
         //2设置电话监听
         TelephonyManager telephonyManager=(TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
@@ -148,13 +146,11 @@ public class Player extends Activity {
     	case R.id.lastbutton://上一个按钮
     		nowfile=lastfilen;
     		dealfile(nowfile);
-    		drawbmp();
     		play2(nowfile);
     		break;
     	case R.id.nextbutton://下一个按钮
     		nowfile=nextfilen;
     		dealfile(nowfile);
-    		drawbmp();
     		play2(nowfile);
     		break;
     	}
@@ -162,14 +158,14 @@ public class Player extends Activity {
 	private void dealfile(String file){
 		if((nowfile=file)!=""){
 	        nameText.setText("当前："+nowfile);
-	        int fileindex=Layout1.assetsList.indexOf(nowfile);//获取当前播放文件在列表中的索引 
+	        int fileindex=ssslist.indexOf(nowfile);//获取当前播放文件在列表中的索引 
 	        try{
 		        if((fileindex-1)>=0)
-		        	lastfilen=Layout1.assetsList.get(fileindex-1);
+		        	lastfilen=ssslist.get(fileindex-1);
 		        else
 		        	lastfilen="";
-		        if((fileindex+1)<Layout1.assetsList.size())
-		        	nextfilen=Layout1.assetsList.get(fileindex+1);
+		        if((fileindex+1)<ssslist.size())
+		        	nextfilen=ssslist.get(fileindex+1);
 		        else
 		        	nextfilen="";
 	        }catch(Exception e){
@@ -182,13 +178,11 @@ public class Player extends Activity {
 	        	nextnameText.setText("");
 	        else
 	        	nextnameText.setText("下一个："+nextfilen);
-	        MyTabHostFive.strText=nowfile;
 		}
 	}
 	
-	private void drawbmp(){
+	private void drawBmp(){
 		Bitmap bitmap=bmp;
-		
 		if(ss!=null){
 			x=ss.getX();
 			y=ss.getY();
@@ -204,7 +198,8 @@ public class Player extends Activity {
 				x=hw;
 			if(y-(hw/2)<0)
 				y=hw;
-			bitmap=Bitmap.createBitmap(bitmap, x-(hw/2), y-(hw/2), hw, hw);
+			if(x-(hw/2)+hw<=bmp.getWidth()&&y-(hw/2)+hw<=bmp.getHeight())
+				bitmap=Bitmap.createBitmap(bitmap, x-(hw/2), y-(hw/2), hw, hw);
 		}
         imagev.setImageBitmap(bitmap);
 	}
@@ -234,37 +229,35 @@ public class Player extends Activity {
 	}
 	
 	private void play2(String file){
-		////////////////////////////////////////////2014.2.8
 		IntelligentGuideDaoImpl igdi=new IntelligentGuideDaoImpl(getApplicationContext());
 		ss=igdi.searchSpotsBySpots_name(nowfile);
-		String filname=ss.getFile_name();
-		
-		Log.v("当前播放", nowfile);
-		
-		drawbmp();
-		File src = new File(Environment.getExternalStorageDirectory()+filname);
-		File dest = new File(Environment.getExternalStorageDirectory()+"/dao/play.mp3");
-		
-		Log.v("音频文件", src.getName());
-		
-		try {
-			xorEn(src, dest);
-		} catch (Exception e) {
+		if(ss!=null){
+			String filname=ss.getFile_name();
+			drawBmp();
+			File src = new File(Environment.getExternalStorageDirectory()+filname);
+			File dest = new File(Environment.getExternalStorageDirectory()+"/dao/play.mp3");
+			try {
+				xorEn(src, dest);
+			} catch (Exception e) {
+			}
+			File audio=dest;
+			if(audio.exists()){
+				path=audio.getPath();
+				play(0);//从头开始播放
+				int i = 0;
+				for(i = 0; !dest.delete() && i <= 20; i++);
+			}
+			else{
+				path=null;
+				Toast.makeText(getApplicationContext(), R.string.filenoexist, 1).show();
+			}
 		}
-		File audio=dest;
-		if(audio.exists()){
-			path=audio.getPath();
-			play(0);//从头开始播放
-			int i = 0;
-			for(i = 0; !dest.delete() && i <= 20; i++);
-		}
-		else{
-			path=null;
-			Toast.makeText(getApplicationContext(), R.string.filenoexist, 1).show();
+		else {
+			Toast.makeText(getApplicationContext(), R.string.placereturn, 1).show();
 		}
 	}
 	
-	// 异或加密解密
+	// 异或解密
 	public static void xorEn(File src, File dest) throws Exception {
 		// 文件不存在或为文件夹就不判断了
 		String kk=R.string.keykey+"";

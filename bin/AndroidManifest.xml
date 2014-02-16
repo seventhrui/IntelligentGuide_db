@@ -3,27 +3,34 @@
       package="com.seventh.intelligentguide"
       android:versionCode="1"
       android:versionName="1.5.0">
-    <application 
+    <application
+        android:allowBackup="true"
+        android:theme="@style/AppTheme"
         android:icon="@drawable/icon" 
         android:label="@string/app_name">
-        <activity android:name="com.seventh.intelligentguide.Index" android:label="@string/app_name">
+        <activity android:name="com.seventh.intelligentguide.DashboardActivity" android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.seventh.intelligentguide.tabhost.PlaceList" android:label="@string/app_name" />
-        <activity android:name="com.seventh.intelligentguide.tabhost.MyTabHostFive" android:label="@string/app_name">
+        <activity android:name="com.seventh.intelligentguide.UserLogin1" android:label="@string/app_name"/>
+        <activity android:name="com.seventh.intelligentguide.UserLogin" android:label="@string/app_name"/>
+        <activity android:name="com.seventh.intelligentguide.UserRegister" android:label="@string/app_name"/>
+        
+        <activity android:name="com.seventh.intelligentguide.Index" android:label="@string/app_name"/>
+        <activity android:name="com.seventh.intelligentguide.activity.PlaceList" android:label="@string/app_name" />
+        <activity android:name="com.seventh.intelligentguide.activity.MyTabHostFive" android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.SQUARE" />
                 <category android:name="android.intent.category.SQUARE" />
             </intent-filter>
         </activity>
-        <activity android:name="com.seventh.intelligentguide.tabhost.Layout1" android:label="@string/app_name" />
-		<activity android:name="com.seventh.intelligentguide.tabhost.Layout2" android:label="@string/app_name" />
-		<activity android:name="com.seventh.intelligentguide.tabhost.Layout3" android:label="@string/app_name" />
-		<activity android:name="com.seventh.intelligentguide.tabhost.Layout4" android:label="@string/app_name" />
-		<activity android:name="com.seventh.intelligentguide.tabhost.Layout5" android:label="@string/app_name" />
+        <activity android:name="com.seventh.intelligentguide.activity.Layout1" android:label="@string/app_name" />
+		<activity android:name="com.seventh.intelligentguide.activity.Layout2" android:label="@string/app_name" />
+		<activity android:name="com.seventh.intelligentguide.activity.Layout3" android:label="@string/app_name" />
+		<activity android:name="com.seventh.intelligentguide.activity.Layout4" android:label="@string/app_name" />
+		<activity android:name="com.seventh.intelligentguide.activity.Layout5" android:label="@string/app_name" />
 		
         <activity android:name="com.seventh.intelligentguide.util.Player" android:label="播放">
             <intent-filter>
@@ -31,6 +38,13 @@
                 <category android:name="android.intent.category.SQUARE" />
             </intent-filter>
         </activity>
+        <!-- 定义广播接收者 -->
+        <receiver android:name="com.seventh.intelligentguide.receiver.ActivityReceiver">
+            <intent-filter >
+                <action android:name="com.seventh.intelligentguide.tabhost.Layout1.assetslist"/>
+            </intent-filter>
+            
+        </receiver>
     </application>
     
     <uses-sdk android:minSdkVersion="7" />
@@ -44,6 +58,12 @@
 	<!-- 定位权限-->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <!-- 访问网络 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 短信权限 -->
+	<uses-permission android:name="android.permission.SEND_SMS"/>
+	<!-- 读取联系人权限 -->
+	<uses-permission android:name="android.permission.READ_CONTACTS"/>
 	
 	<!-- 添加对屏幕支持 -->
 	<supports-screens 

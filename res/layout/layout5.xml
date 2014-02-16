@@ -7,7 +7,7 @@
 		android:id="@+id/jingdu"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:textColor="@color/white"
+		android:textColor="@color/red"
 		android:textSize="15sp"
 		android:gravity="center"
 		/>
@@ -15,7 +15,7 @@
         android:id="@+id/weidu"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"
+        android:textColor="@color/red"
         android:textSize="15sp"
         android:gravity="center"
         />
@@ -23,7 +23,7 @@
         android:id="@+id/scenicName"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"
+        android:textColor="@color/red"
         android:textSize="25sp"
         android:gravity="center"
         />

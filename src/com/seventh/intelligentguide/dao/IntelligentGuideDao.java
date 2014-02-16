@@ -2,7 +2,7 @@ package com.seventh.intelligentguide.dao;
 
 import java.util.List;
 
-import com.seventh.intelligentguide.vo.ScenicSpot;
+import com.seventh.intelligentguide.beans.ScenicSpotBean;
 
 public interface IntelligentGuideDao {
 	
@@ -28,13 +28,13 @@ public interface IntelligentGuideDao {
 	 * @param Scenic_name
 	 * @return
 	 */
-	public List<ScenicSpot> searchSpotsList(String Scenic_name);
+	public List<ScenicSpotBean> searchSpotsList(String Scenic_name);
 	/**
 	 * 查询景点类通过景点名
 	 * @param Scenic_name
 	 * @return
 	 */
-	public ScenicSpot searchSpotsBySpots_name(String Spots_name);
+	public ScenicSpotBean searchSpotsBySpots_name(String Spots_name);
 	/**
 	 * 通过编号获取景点名
 	 * @param Spots_name 景区名
@@ -57,7 +57,7 @@ public interface IntelligentGuideDao {
 	 * @param la
 	 * @return
 	 */
-	public ScenicSpot getSpotsByLoandLa(String Scenic_name,double lo,double la);
+	public ScenicSpotBean getSpotsByLoandLa(String Scenic_name,double lo,double la);
 	/**
 	 * 通过x，y坐标获取景点名
 	 * @param Spots_name 景区名
@@ -73,5 +73,5 @@ public interface IntelligentGuideDao {
 	 * @param y
 	 * @return
 	 */
-	public ScenicSpot getSpotsByXandY(String Scenic_name,float x,float y);
+	public ScenicSpotBean getSpotsByXandY(String Scenic_name,float x,float y);
 }

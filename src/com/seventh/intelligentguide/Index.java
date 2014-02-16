@@ -14,17 +14,20 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.seventh.intelligentguide.activity.PlaceList;
 import com.seventh.intelligentguide.dao.impl.IntelligentGuideDaoImpl;
-import com.seventh.intelligentguide.tabhost.Layout1;
-import com.seventh.intelligentguide.tabhost.PlaceList;
+import com.seventh.intelligentguide.util.ApplictionManage;
 import com.seventh.intelligentguide.util.AssetsDatabaseManager;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,12 +42,14 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class Index extends Activity {
 	private List<String> place = new ArrayList<String>();
-	private static String placeTitle = "";// 地区标题
+	private static String placeName = "";// 地区标题
 	public static String place_file = "";// 地区文件夹
 
 	private SimpleDateFormat sdf;// 时间格式
 	private Date nowDate;// 当前时间
 	private String timestr;// 当前时间字符串
+
+	private String logined = null;
 
 	private File logFile = null;// 日志文件
 	private static List<String> logList;// 日志列表
@@ -53,21 +58,25 @@ public class Index extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.index);
-		
+
+		logined = getIntent().getStringExtra("logined");
+
+		// 将本Activity加入到ActivityManage列表中
+		ApplictionManage.getApplictionManage().addActivity(this);
+
 		// 初始化，只需要调用一次
 		AssetsDatabaseManager.initManager(getApplication());
 		// 获取管理对象，因为数据库需要通过管理对象才能够获取
 		AssetsDatabaseManager mg = AssetsDatabaseManager.getManager();
 		// 通过管理对象获取数据库
-		//SQLiteDatabase db1 = 
 		mg.getDatabase("jingdian.db");
-		
+
 		sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		nowDate = new Date(System.currentTimeMillis());
 		timestr = sdf.format(nowDate);
 		logFile = new File(Environment.getExternalStorageDirectory()
 				+ "/dao/log.x");
-		if (!fileIsExist(logFile))
+		if (!fileIsExits(logFile))
 			alertDialog("资源文件缺失，请重新下载资源文件");
 		else if (fileIsNull(logFile)) {
 			writeLog(logFile, timestr);
@@ -75,7 +84,7 @@ public class Index extends Activity {
 		} else {
 			logList = readLog(logFile);
 			if (logList.get(logList.size() - 1).compareTo(timestr) >= 0) {
-				alertDialog("请调整手机时间，否则应用不能正常使用");
+				timeDialog("请调整手机时间，否则应用不能正常使用");
 			} else {
 				writeLog(logFile, timestr);
 				try {
@@ -84,7 +93,7 @@ public class Index extends Activity {
 					lo = (nowDate.getTime() - curDate.getTime()) / 1000 / 60
 							/ 60 / 24;
 					if (lo >= 4 || lo <= -4) {
-						alertLogin("您的应用已过期，请输入购买的序列号", "提交");
+						alertRenew("您的应用已过期，请输入购买的序列号", "提交");
 					} else {
 						goToPlace();
 					}
@@ -94,35 +103,40 @@ public class Index extends Activity {
 			}
 		}
 	}
+
 	/**
 	 * 跳转到地点列表
 	 */
-	private void goToPlace(){
-		IntelligentGuideDaoImpl igdi=new IntelligentGuideDaoImpl(getApplicationContext());
-		place=igdi.searchCityList();
-		Intent mainIntent = new Intent(
-				"android.intent.action.SQUARE", null);
-		mainIntent
-				.addCategory("android.intent.category.SQUARE");
-		ListView zonglist = (ListView) this
-				.findViewById(R.id.listview_place);
+	private void goToPlace() {
+		IntelligentGuideDaoImpl igdi = new IntelligentGuideDaoImpl(
+				getApplicationContext());
+		place = igdi.searchCityList();
+		String shiyongplace = place.get(0);
+		if (logined.equals("shiyong")) {
+			place.clear();
+			place.add(shiyongplace);
+		}
+		Intent mainIntent = new Intent("android.intent.action.SQUARE", null);
+		mainIntent.addCategory("android.intent.category.SQUARE");
+		ListView zonglist = (ListView) this.findViewById(R.id.listview_place);
 		zonglist.setAdapter(new ArrayAdapter<String>(this,
-				android.R.layout.simple_expandable_list_item_1,
-				place));
+				android.R.layout.simple_expandable_list_item_1, place));
 		zonglist.setOnItemClickListener(new ItemClickListener());
 	}
-	
+
 	/**
 	 * 检查资源完整性(判断文件是否存在)
+	 * 
 	 * @param file
 	 * @return boolean
 	 */
-	private boolean fileIsExist(File file) {
+	private boolean fileIsExits(File file) {
 		return file.exists();
 	}
 
 	/**
 	 * 判断文件是否为空
+	 * 
 	 * @param file
 	 * @return boolean
 	 * @throws Exception
@@ -130,15 +144,15 @@ public class Index extends Activity {
 	private boolean fileIsNull(File file) {
 		FileInputStream fis = null;
 		BufferedInputStream bis = null;
-		Boolean isNull=true;
+		Boolean isNull = true;
 		try {
 			fis = new FileInputStream(file);
 			bis = new BufferedInputStream(fis);
 			if (bis.read() == -1) {
-				
-				isNull=true;
-			} else{
-				isNull=false;
+
+				isNull = true;
+			} else {
+				isNull = false;
 			}
 			bis.close();
 			fis.close();
@@ -150,6 +164,7 @@ public class Index extends Activity {
 
 	/**
 	 * 写日志
+	 * 
 	 * @param logFile
 	 * @param str
 	 */
@@ -167,6 +182,7 @@ public class Index extends Activity {
 
 	/**
 	 * 读日志文件
+	 * 
 	 * @param logFile
 	 * @return
 	 */
@@ -188,17 +204,64 @@ public class Index extends Activity {
 		return readList;
 	}
 
+	/**
+	 * 续费通知框
+	 * 
+	 * @param message
+	 * @param action
+	 */
+	public void alertRenew(String message, String action) {
+		final EditText txt = new EditText(this);
+		new AlertDialog.Builder(this).setTitle(message)
+				.setIcon(android.R.drawable.ic_dialog_info).setView(txt)
+				.setPositiveButton(action, new OnClickListener() {
+					// 续费
+					public void onClick(DialogInterface dialog, int which) {
+						String password = txt.getText().toString();
+						if (password.equals("9639")) {
+							File f = new File(Environment
+									.getExternalStorageDirectory()
+									+ "/dao/log.x");
+							FileWriter fw;
+							try {
+								fw = new FileWriter(f);
+								fw.write("");
+								fw.close();
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+							Toast.makeText(getApplicationContext(),
+									"续费成功，应用即将重启", Toast.LENGTH_SHORT).show();
+							// 重启应用线程
+							new Thread(new Runnable() {
+								@Override
+								public void run() {
+									Intent i = getBaseContext()
+											.getPackageManager()
+											.getLaunchIntentForPackage(
+													getBaseContext()
+															.getPackageName());
+									i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+									startActivity(i);
+								}
+							}).run();
+						}
+					}
+				}).setNegativeButton("取消", null).show();
+	}
+
 	public class ItemClickListener implements OnItemClickListener {
 		@Override
 		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 				long arg3) {
-			Layout1.assetsList.clear();
-			placeTitle = ((TextView) arg1).getText().toString();
-			/*if (placeTitle.equals("泰安")) {
-				place_file = "taian";
-			}*/
-			place_file = placeTitle;
+			placeName = ((TextView) arg1).getText().toString();
+			place_file = placeName;
 			Intent in = new Intent(Index.this, PlaceList.class);
+
+			Bundle bundle = new Bundle();
+			bundle.putCharSequence("placename", placeName);
+			in.putExtras(bundle);
+
 			startActivity(in);
 		}
 	}
@@ -207,21 +270,28 @@ public class Index extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// int groupId, int itemId, int order, int titleRes
-		menu.add(0, 1, 1, R.string.login);// 添加退出选项
+		menu.add(0, 1, 1, R.string.logout);// 添加注销选项
 		menu.add(0, 2, 2, R.string.recommend);// 添加推荐选项
 		menu.add(0, 3, 3, R.string.advice);// 意见反馈
 		menu.add(0, 4, 4, R.string.update);// 检查更新
-		menu.add(0, 5, 5, R.string.about);// 添加关于选项(功能暂未添加)
+		menu.add(0, 5, 5, R.string.about);// 添加关于选项
 		menu.add(0, 6, 6, R.string.exit);// 添加退出选项
 		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		// 注销
 		if (item.getItemId() == 1) {
-			alertLogin("请登录", "登陆");
+			SharedPreferences userinfo;
+			userinfo = getSharedPreferences("config", MODE_PRIVATE);
+			userinfo.edit().clear().commit();
+			finish();
+			Intent in = new Intent();
+			in.setClass(Index.this, UserLogin.class);
+			startActivity(in);
 		} else if (item.getItemId() == 2) {
-			alertLogin("请输入朋友手机号", "推荐");
+			alertLogin("请输入朋友手机号", "分享");
 		} else if (item.getItemId() == 3) {
 			alertLogin("请填写您的意见", "提交");
 		} else if (item.getItemId() == 4) {
@@ -230,14 +300,14 @@ public class Index extends Activity {
 			Toast.makeText(getApplicationContext(), R.string.aboutstring, 10)
 					.show();
 		} else if (item.getItemId() == 6) {
-			finish();
+			ApplictionManage.getApplictionManage().exitApp();
 		}
-
 		return super.onOptionsItemSelected(item);
 	}
 
 	/**
 	 * 弹出框
+	 * 
 	 * @param message
 	 * @param action
 	 */
@@ -247,33 +317,63 @@ public class Index extends Activity {
 				.setView(new EditText(this)).setPositiveButton(action, null)
 				.setNegativeButton("取消", null).show();
 	}
-	
+
 	/**
-	 * 弹出对话框
+	 * 弹出世间设置
+	 * 
 	 * @param message
 	 */
-	public void alertDialog(String message){
+	public void timeDialog(String message) {
 		new AlertDialog.Builder(this)
-		.setTitle("提示")
-		.setMessage(message+"\n(确定键退出)")
-		.setIcon(android.R.drawable.ic_dialog_info)
-		.setPositiveButton("确定",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog,
-							int whichButton) {
+				.setTitle("提示")
+				.setMessage(message + "\n(确定键退出)")
+				.setIcon(android.R.drawable.ic_dialog_info)
+				.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
 						setResult(RESULT_OK);// 确定按钮事件
-						finish();
+						Intent intent = new Intent(
+								Settings.ACTION_DATE_SETTINGS);
+						startActivity(intent);
+						// 退出应用线程
+						new Thread(new Runnable() {
+							@Override
+							public void run() {
+								ApplictionManage.getApplictionManage()
+										.exitApp();
+							}
+						}).run();
 					}
 				})
-		.setNegativeButton("取消",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog,
-							int whichButton) {
+				.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
 						// 取消按钮事件
 					}
 				}).show();
 	}
-	
+
+	/**
+	 * 弹出对话框
+	 * 
+	 * @param message
+	 */
+	public void alertDialog(String message) {
+		new AlertDialog.Builder(this)
+				.setTitle("提示")
+				.setMessage(message + "\n(确定键退出)")
+				.setIcon(android.R.drawable.ic_dialog_info)
+				.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						setResult(RESULT_OK);// 确定按钮事件
+						ApplictionManage.getApplictionManage().exitApp();
+					}
+				})
+				.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						// 取消按钮事件
+					}
+				}).show();
+	}
+
 	/**
 	 * 单选框
 	 */
@@ -308,8 +408,7 @@ public class Index extends Activity {
 						Toast.LENGTH_SHORT).show();
 				exitTime = System.currentTimeMillis();
 			} else {
-				finish();
-				System.exit(0);
+				ApplictionManage.getApplictionManage().exitApp();
 			}
 			return true;
 		}
