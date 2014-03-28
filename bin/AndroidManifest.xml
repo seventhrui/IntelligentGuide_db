@@ -43,7 +43,6 @@
             <intent-filter >
                 <action android:name="com.seventh.intelligentguide.tabhost.Layout1.assetslist"/>
             </intent-filter>
-            
         </receiver>
     </application>
     

@@ -3,7 +3,7 @@
  * URL: www.androidhive.info
  * twitter: http://twitter.com/ravitamada
  * */
-package com.seventh.intelligentguide.httphelp;
+package com.seventh.intelligentguide.httphelper;
 
 import java.io.BufferedReader;
 import java.io.IOException;

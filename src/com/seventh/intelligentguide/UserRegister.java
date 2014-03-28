@@ -3,8 +3,9 @@ package com.seventh.intelligentguide;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.seventh.intelligentguide.httphelp.DatabaseHandler;
-import com.seventh.intelligentguide.httphelp.UserFunctions;
+import com.seventh.intelligentguide.httphelper.DatabaseHandler;
+import com.seventh.intelligentguide.httphelper.UserFunctions;
+import com.seventh.intelligentguide.util.ApplictionManage;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -36,7 +37,7 @@ public class UserRegister extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.userregister);
-
+		ApplictionManage.getApplictionManage().addActivity(this);
 		// Importing all assets like buttons, text fields
 		inputFullName = (EditText) findViewById(R.id.registerName);
 		inputEmail = (EditText) findViewById(R.id.registerEmail);
@@ -70,7 +71,7 @@ public class UserRegister extends Activity {
 							userFunction.logoutUser(getApplicationContext());
 							db.addUser(json_user.getString(KEY_NAME), json_user.getString(KEY_EMAIL), json.getString(KEY_UID), json_user.getString(KEY_CREATED_AT));						
 							// Launch Dashboard Screen
-							Intent dashboard = new Intent(getApplicationContext(), DashboardActivity.class);
+							Intent dashboard = new Intent(getApplicationContext(), UserLogin.class);
 							// Close all views before launching Dashboard
 							dashboard.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 							startActivity(dashboard);

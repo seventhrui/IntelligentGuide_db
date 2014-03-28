@@ -15,9 +15,7 @@ public class ApplictionManage extends Application {
 	private List<Activity> activityList=new LinkedList<Activity>();
 	private static ApplictionManage applictionmanage;
 	private ApplictionManage(){
-		
 	}
-	
 	/**
 	 * 单例模式返回ApplictionManage实例
 	 * @return
@@ -28,7 +26,6 @@ public class ApplictionManage extends Application {
 		}
 		return applictionmanage;
 	}
-	
 	/**
 	 * 将activity加入到List中
 	 * @param activity

@@ -1,11 +1,6 @@
-/**
- * Author: Ravi Tamada
- * URL: www.androidhive.info
- * twitter: http://twitter.com/ravitamada
- * */
 package com.seventh.intelligentguide;
 
-import com.seventh.intelligentguide.httphelp.UserFunctions;
+import com.seventh.intelligentguide.httphelper.UserFunctions;
 
 import android.app.Activity;
 import android.content.Intent;

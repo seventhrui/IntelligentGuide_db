@@ -44,7 +44,7 @@ public class Layout1 extends Activity {
         assetsList=igdi.searchSpotsNameList(filename);
         
         Intent it = new Intent(this,ActivityReceiver.class);
-        it.setAction("com.seventh.intelligentguide.tabhost.Layout1.assetslist");  
+        it.setAction("com.seventh.intelligentguide.tabhost.Layout1.assetslist");
         it.putStringArrayListExtra("assetslist", (ArrayList<String>) assetsList);
         sendBroadcast(it);//广播景点列表
 		

@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import com.seventh.intelligentguide.R;
+import com.seventh.intelligentguide.receiver.ActivityReceiver;
 import com.seventh.intelligentguide.util.Player;
 
 import android.app.Activity;
@@ -13,6 +14,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -31,9 +33,9 @@ public class Layout4 extends Activity implements OnClickListener{
 	private ListView speacklistView;
 	private static final int REQUEST_CODE = 1;
 	private String scenic="";//语音识别 到一个景点名时直接播放时使用
+	private ActivityReceiver areceiver;
 	
 	List<String> slist=new ArrayList<String>();//识别过滤后列表
-	//List<String> sslist=new ArrayList<String>();//景点列表
 	List<String> ssslist=new ArrayList<String>();//景点列表
 	
     @Override
@@ -42,11 +44,8 @@ public class Layout4 extends Activity implements OnClickListener{
         setContentView(R.layout.layout4);
         btn = (Button) this.findViewById(R.id.btn);
         speacklistView = (ListView) this.findViewById(R.id.listview);
-        //sslist=Layout1.assetsList;//获取景点列表
-        ssslist=getIntent().getStringArrayListExtra("assetslist");
-    	/*for(String sss:sslist){
-    		Log.v("景点列表_Layout4", sss);
-    	}*/
+        areceiver=new ActivityReceiver();
+        ssslist=areceiver.getAssetsList();
         /**
          * 下面是判断当前手机是否支持语音识别功能
          */

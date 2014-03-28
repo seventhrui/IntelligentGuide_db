@@ -1,9 +1,4 @@
-/**
- * Author: Ravi Tamada
- * URL: www.androidhive.info
- * twitter: http://twitter.com/ravitamada
- * */
-package com.seventh.intelligentguide.httphelp;
+package com.seventh.intelligentguide.httphelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +14,8 @@ public class UserFunctions {
 	
 	private JSONParser jsonParser;
 	
-	private static String loginURL = "http://192.168.2.104:1234/IntelligentGuide/android_login_api/index.php";
-	private static String registerURL = "http://192.168.2.104:1234/IntelligentGuide/android_login_api/index.php";
+	private static String loginURL = "http://192.168.2.105:1234/IntelligentGuide/android_login_api/index.php";
+	private static String registerURL = "http://192.168.2.105:1234/IntelligentGuide/android_login_api/index.php";
 	
 	private static String login_tag = "login";
 	private static String register_tag = "register";
@@ -31,7 +26,7 @@ public class UserFunctions {
 	}
 	
 	/**
-	 * function make Login Request
+	 * µÇÂ¼ÇëÇó
 	 * @param email
 	 * @param password
 	 * */
@@ -48,7 +43,7 @@ public class UserFunctions {
 	}
 	
 	/**
-	 * function make Login Request
+	 * ×¢²áÇëÇó
 	 * @param name
 	 * @param email
 	 * @param password
@@ -67,7 +62,7 @@ public class UserFunctions {
 	}
 	
 	/**
-	 * Function get Login status
+	 * »ñÈ¡µÇÂ¼×´Ì¬
 	 * */
 	public boolean isUserLoggedIn(Context context){
 		DatabaseHandler db = new DatabaseHandler(context);

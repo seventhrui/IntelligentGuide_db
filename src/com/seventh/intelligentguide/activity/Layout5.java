@@ -92,7 +92,6 @@ public class Layout5 extends Activity {
 			Log.v("测试经纬度", lalo.toString());
 			Log.v("GPS参数：", GPSHelper.getGPSHelper().getCanshu(lalo).toString());
 		}*/
-		
 		updateView(location);
 		// 监听状态
 		lm.addGpsStatusListener(listener);
@@ -199,6 +198,7 @@ public class Layout5 extends Activity {
 			/*lalo=new LatLon(location.getLatitude(),location.getLongitude());
 			Log.v("测试经纬度", lalo.toString());
 			Log.v("GPS参数：", GPSHelper.getGPSHelper().getCanshu(lalo).toString());*/
+			
 			
 			tv_Lon.setText("经度:" + String.valueOf(location.getLongitude())
 					+ "," + "纬度:" + String.valueOf(location.getLatitude()));

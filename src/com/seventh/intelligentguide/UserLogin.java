@@ -1,15 +1,10 @@
-/**
- * Author: Ravi Tamada
- * URL: www.androidhive.info
- * twitter: http://twitter.com/ravitamada
- * */
 package com.seventh.intelligentguide;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.seventh.intelligentguide.httphelp.DatabaseHandler;
-import com.seventh.intelligentguide.httphelp.UserFunctions;
+import com.seventh.intelligentguide.httphelper.DatabaseHandler;
+import com.seventh.intelligentguide.httphelper.UserFunctions;
 import com.seventh.intelligentguide.util.ApplictionManage;
 
 import android.app.Activity;
@@ -18,7 +13,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -76,8 +70,7 @@ public class UserLogin extends Activity {
 				} else {
 					UserFunctions userFunction = new UserFunctions();
 					JSONObject json = userFunction.loginUser(email, password);
-
-					// check for login response
+					// ¼ì²éµÇÂ¼ÇëÇó
 					try {
 						if (json.getString(KEY_SUCCESS) != null) {
 							loginErrorMsg.setText("");
