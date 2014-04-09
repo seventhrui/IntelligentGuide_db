@@ -32,7 +32,7 @@
 		<activity android:name="com.seventh.intelligentguide.activity.Layout4" android:label="@string/app_name" />
 		<activity android:name="com.seventh.intelligentguide.activity.Layout5" android:label="@string/app_name" />
 		
-        <activity android:name="com.seventh.intelligentguide.util.Player" android:label="播放">
+        <activity android:name="com.seventh.intelligentguide.activity.Player" android:label="播放">
             <intent-filter>
                 <action android:name="android.intent.action.SQUARE" />
                 <category android:name="android.intent.category.SQUARE" />

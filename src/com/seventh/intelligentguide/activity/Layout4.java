@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.seventh.intelligentguide.R;
 import com.seventh.intelligentguide.receiver.ActivityReceiver;
-import com.seventh.intelligentguide.util.Player;
 
 import android.app.Activity;
 import android.content.Intent;

@@ -1,17 +1,15 @@
-package com.seventh.intelligentguide.util;
+package com.seventh.intelligentguide.activity;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.seventh.intelligentguide.R;
-import com.seventh.intelligentguide.activity.PlaceList;
 import com.seventh.intelligentguide.beans.ScenicSpotBean;
 import com.seventh.intelligentguide.dao.impl.IntelligentGuideDaoImpl;
 import com.seventh.intelligentguide.receiver.ActivityReceiver;
+import com.seventh.intelligentguide.util.DeciphermentFile;
 
 import android.app.Activity;
 import android.content.Context;
@@ -260,7 +258,7 @@ public class Player extends Activity {
 	// 异或解密
 	public static void xorEn(File src, File dest) throws Exception {
 		// 文件不存在或为文件夹就不判断了
-		String kk=R.string.keykey+"";
+		/*String kk=R.string.keykey+"";
         String k=kk.charAt(0)+"";
         final int a=Integer.parseInt(k)*9;
 		class test {
@@ -278,7 +276,26 @@ public class Player extends Activity {
 			fos.write(bs, 0, len);
 		}
 		fos.close();
-		fis.close();
+		fis.close();*/
+		int blockCount=2;
+	    //依次分块进行文件COPY
+	    for(int i=0;i<blockCount;i++)
+	    {
+	        //实例化文件复制对象
+	        DeciphermentFile dealFile=new DeciphermentFile(src.getPath(),dest.getPath(),blockCount,i);
+	        //实例化线程
+	        Thread thread=new Thread(dealFile);
+	        //开始线程
+	        thread.start();
+	        try
+	        {
+	            //加入线程
+	            thread.join();
+	        }
+	        catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	    }
 	}
 	
 	private final class PrepareListener implements OnPreparedListener {

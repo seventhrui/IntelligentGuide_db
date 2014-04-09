@@ -2,7 +2,6 @@ package com.seventh.intelligentguide.activity;
 
 import com.seventh.intelligentguide.R;
 import com.seventh.intelligentguide.dao.impl.IntelligentGuideDaoImpl;
-import com.seventh.intelligentguide.util.Player;
 
 import android.os.Bundle;
 import android.app.Activity;

@@ -4,7 +4,6 @@ import java.io.InputStream;
 
 import com.seventh.intelligentguide.R;
 import com.seventh.intelligentguide.dao.impl.IntelligentGuideDaoImpl;
-import com.seventh.intelligentguide.util.Player;
 
 import android.app.Activity;
 import android.content.Context;

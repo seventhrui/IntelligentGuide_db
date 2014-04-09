@@ -98,7 +98,7 @@ public class MyTabHostFive extends TabActivity {
 						R.drawable.number_bg));
 			}
 			/* 设置tab的高度 */
-			mTabWidget.getChildAt(i).getLayoutParams().height = 50;
+			mTabWidget.getChildAt(i).getLayoutParams().height = 100;
 			TextView tv = (TextView) mTabWidget.getChildAt(i).findViewById(
 					android.R.id.title);
 			/* 设置tab内字体的颜色 */
