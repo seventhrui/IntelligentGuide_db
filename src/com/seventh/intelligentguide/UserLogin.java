@@ -20,7 +20,11 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
+/**
+ * ÓÃ»§µÇÂ¼
+ * @author rui
+ *
+ */
 public class UserLogin extends Activity {
 	private Button btnLogin;// µÇÂ¼
 	private Button btnLinkToRegister;// ×¢²á
