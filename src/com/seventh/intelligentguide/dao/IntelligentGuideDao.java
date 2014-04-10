@@ -2,6 +2,7 @@ package com.seventh.intelligentguide.dao;
 
 import java.util.List;
 
+import com.seventh.intelligentguide.beans.GPSparameter;
 import com.seventh.intelligentguide.beans.ScenicSpotBean;
 
 public interface IntelligentGuideDao {
@@ -57,7 +58,7 @@ public interface IntelligentGuideDao {
 	 * @param la
 	 * @return
 	 */
-	public ScenicSpotBean getSpotsByLoandLa(String Scenic_name,double lo,double la);
+	public ScenicSpotBean getSpotsByLoandLa(String Scenic_name,double lo,double la,GPSparameter gpsp);
 	/**
 	 * 通过x，y坐标获取景点名
 	 * @param Spots_name 景区名

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.seventh.intelligentguide.beans.GPSparameter;
 import com.seventh.intelligentguide.beans.ScenicSpotBean;
 import com.seventh.intelligentguide.dao.IntelligentGuideDao;
 import com.seventh.intelligentguide.db.GuideSQLiteOpenHelper;
@@ -123,9 +124,10 @@ public class IntelligentGuideDaoImpl implements IntelligentGuideDao {
 	}
 	
 	@Override
-	public ScenicSpotBean getSpotsByLoandLa(String Scenic_name, double lo, double la) {
+	public ScenicSpotBean getSpotsByLoandLa(String Scenic_name, double lo, double la, GPSparameter gpsp) {
 		ScenicSpotBean ss=null;
-		cursor = db.rawQuery("SELECT Spots.Spots_id,Spots.Spots_name,Spots.Spots_X,Spots.Spots_Y,Spots.Spots_lo,Spots.Spots_la,Spots.Scenic_id,Spots.File_name FROM Spots,Scenic WHERE Scenic_name=? AND Spots.Scenic_id=Scenic.Scenic_id AND Spots.Spots_lo>? AND Spots.Spots_lo<? AND Spots.Spots_la>? AND Spots.Spots_la<?", new String[]{Scenic_name,String.valueOf(lo-0.0002),String.valueOf(lo+0.0002),String.valueOf(la-0.0002),String.valueOf(la+0.0002)});
+		//cursor = db.rawQuery("SELECT Spots.Spots_id,Spots.Spots_name,Spots.Spots_X,Spots.Spots_Y,Spots.Spots_lo,Spots.Spots_la,Spots.Scenic_id,Spots.File_name FROM Spots,Scenic WHERE Scenic_name=? AND Spots.Scenic_id=Scenic.Scenic_id AND Spots.Spots_lo>? AND Spots.Spots_lo<? AND Spots.Spots_la>? AND Spots.Spots_la<?", new String[]{Scenic_name,String.valueOf(lo-0.0002),String.valueOf(lo+0.0002),String.valueOf(la-0.0002),String.valueOf(la+0.0002)});
+		cursor = db.rawQuery("SELECT Spots.Spots_id,Spots.Spots_name,Spots.Spots_X,Spots.Spots_Y,Spots.Spots_lo,Spots.Spots_la,Spots.Scenic_id,Spots.File_name FROM Spots,Scenic WHERE Scenic_name=? AND Spots.Scenic_id=Scenic.Scenic_id AND Spots.Spots_lo>? AND Spots.Spots_lo<? AND Spots.Spots_la>? AND Spots.Spots_la<?", new String[]{Scenic_name,String.valueOf(lo+gpsp.getLox()),String.valueOf(lo+gpsp.getLod()),String.valueOf(la+gpsp.getLan()),String.valueOf(la+gpsp.getLab())});
 		while (cursor.moveToNext()) {
 			String s0 = cursor.getString(0);
 			String s1 = cursor.getString(1);

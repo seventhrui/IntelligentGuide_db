@@ -10,6 +10,7 @@ import com.seventh.intelligentguide.beans.GPSparameter;
 import com.seventh.intelligentguide.beans.LatLon;
 import com.seventh.intelligentguide.beans.ScenicSpotBean;
 import com.seventh.intelligentguide.dao.impl.IntelligentGuideDaoImpl;
+import com.seventh.intelligentguide.util.GPSHelper;
 
 import android.app.Activity;
 import android.content.Context;
@@ -38,15 +39,15 @@ public class Layout5 extends Activity {
 	private TextView tv_lat;//纬度
 	private TextView TxtViewScenicName;//景点名
 	public static String nowVoiceName = "";
-	int sum = 0;//搜星颗数
+	private int sum = 0;//搜星颗数
 	private LocationManager lm;
 	private GPSparameter gpsp;//当地GPS参数
 	private LatLon lalo;//景点经纬度
-	
 	private static final String TAG = "GpsActivity";
-	
 	private String scenicName=null;//景区名称
-
+	private String path = null;// 文件路径
+	public static MediaPlayer mediaPlayer = null;// 多媒体播放
+	
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
@@ -87,11 +88,12 @@ public class Layout5 extends Activity {
 		Location location = lm.getLastKnownLocation(bestProvider);
 		
 		//获取当前经纬度参数
-		/*if (location!= null) {
+		if (location!= null) {
 			lalo=new LatLon(location.getLatitude(),location.getLongitude());
+			gpsp=GPSHelper.getGPSHelper().getCanshu(lalo);
 			Log.v("测试经纬度", lalo.toString());
 			Log.v("GPS参数：", GPSHelper.getGPSHelper().getCanshu(lalo).toString());
-		}*/
+		}
 		updateView(location);
 		// 监听状态
 		lm.addGpsStatusListener(listener);
@@ -103,8 +105,7 @@ public class Layout5 extends Activity {
 		// 备注：参数2和3，如果参数3不为0，则以参数3为准；参数3为0，则通过时间来定时更新；两者为0，则随时刷新
 		// 1秒更新一次，或最小位移变化超过1米更新一次；
 		// 注意：此处更新准确度非常低，推荐在service里面启动一个Thread，在run中sleep(10000);然后执行handler.sendMessage(),更新位置
-		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1,
-				locationListener);
+		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1,locationListener);
 		//监听来电状态
 		TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 		telephonyManager.listen(new MyPhoneListener(),
@@ -205,14 +206,10 @@ public class Layout5 extends Activity {
 			tv_lat.setText("搜索到:" + sum + "颗卫星");
 			String ScenicName = null;
 
-			IntelligentGuideDaoImpl igdi = new IntelligentGuideDaoImpl(
-					getApplicationContext());
-			
-			ScenicSpotBean ss = igdi.getSpotsByLoandLa(scenicName,
-					location.getLongitude(), location.getLatitude());
+			IntelligentGuideDaoImpl igdi = new IntelligentGuideDaoImpl(getApplicationContext());
+			ScenicSpotBean ss = igdi.getSpotsByLoandLa(scenicName,location.getLongitude(), location.getLatitude(), gpsp);
 			if (ss != null)
 				ScenicName = ss.getSpots_name();
-
 			if (ScenicName != null) {
 				if (!nowVoiceName.equals(ScenicName)) {
 					nowVoiceName = ScenicName;
@@ -253,9 +250,6 @@ public class Layout5 extends Activity {
 		criteria.setPowerRequirement(Criteria.POWER_LOW);
 		return criteria;
 	}
-
-	private String path = null;// 文件路径
-	public static MediaPlayer mediaPlayer = null;// 多媒体播放
 
 	private void play(int position) {
 		try {
