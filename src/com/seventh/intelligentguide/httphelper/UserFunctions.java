@@ -14,8 +14,8 @@ public class UserFunctions {
 	
 	private JSONParser jsonParser;
 	
-	private static String loginURL = "http://192.168.2.105:1234/IntelligentGuide/android_login_api/index.php";
-	private static String registerURL = "http://192.168.2.105:1234/IntelligentGuide/android_login_api/index.php";
+	private static String loginURL = "http://1.intelligentguide.sinaapp.com/index.php";
+	private static String registerURL = "http://1.intelligentguide.sinaapp.com/index.php";
 	
 	private static String login_tag = "login";
 	private static String register_tag = "register";

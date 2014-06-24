@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.seventh.intelligentguide.activity.PlaceList;
+import com.seventh.intelligentguide.asynctask.DownloadAsyncTask;
 import com.seventh.intelligentguide.dao.impl.IntelligentGuideDaoImpl;
 import com.seventh.intelligentguide.util.ApplictionManage;
 import com.seventh.intelligentguide.util.AssetsDatabaseManager;
@@ -42,6 +43,11 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class Index extends Activity {
 	private List<String> place = new ArrayList<String>();
+	
+	private static final String NATIVE_SAVE_PATH = Environment.getExternalStorageDirectory() + "/dao/";
+	private static final String url = "http://222.142.58.33/file/MDAwMDAwMDHg0M8NGMg5Ux9V0WLnscoKhgjjT2iZJxdSZOxjRtKReg../a4a9adc84959bad3ecf8d252439543f64f89145/dao.zip?key=AAABQFOPEQh8KzwI&a=33550594-da1c03cd-48049-e6f7721226/020100&mode=download";
+	private static final String[] params = new String[] { url,NATIVE_SAVE_PATH, "dao.zip" };
+	
 	private static String placeName = "";// 地区标题
 	public static String place_file = "";// 地区文件夹
 
@@ -364,7 +370,8 @@ public class Index extends Activity {
 				.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int whichButton) {
 						setResult(RESULT_OK);// 确定按钮事件
-						ApplictionManage.getApplictionManage().exitApp();
+						//ApplictionManage.getApplictionManage().exitApp();
+						downloadfile();
 					}
 				})
 				.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -373,7 +380,9 @@ public class Index extends Activity {
 					}
 				}).show();
 	}
-
+	private void downloadfile(){
+		new DownloadAsyncTask(this).execute(params);
+	}
 	/**
 	 * 单选框
 	 */
